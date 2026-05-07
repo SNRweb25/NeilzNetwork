@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Neilz Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #060610;
+      --surface:      #0c0c1c;
+      --card:         #111124;
+      --card2:        #16162c;
+      --border:       rgba(255,255,255,0.07);
+      --border-hi:    rgba(255,255,255,0.13);
+
+      --accent:       #5c6bfc;
+      --accent-light: #7a87fd;
+      --accent-dim:   rgba(92,107,252,0.13);
+      --accent-border:rgba(92,107,252,0.35);
+      --accent-glow:  rgba(92,107,252,0.25);
+
+      --gold:         #f5a623;
+      --gold-dim:     rgba(245,166,35,0.12);
+      --gold-border:  rgba(245,166,35,0.28);
+
+      --green:        #4ade80;
+      --red:          #f87171;
+      --orange:       #fb923c;
+
+      --text:         #f0f0f8;
+      --text-muted:   #8888aa;
+      --text-dim:     #44445a;
+
+      --radius:       10px;
+      --radius-lg:    16px;
+      --radius-xl:    22px;
+      --t:            0.2s;
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    h2, h3 { font-weight: 700; letter-spacing: -0.02em; }
+    p { color: var(--text-muted); }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+    input, select, textarea, button { font-family: inherit; }
+
+    /* ── Utility ── */
+    .hidden { display: none !important; }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      border: none;
+      border-radius: var(--radius);
+      padding: 9px 18px;
+      cursor: pointer;
+      transition: background var(--t), box-shadow var(--t), transform var(--t);
+      white-space: nowrap;
+    }
+
+    .btn--primary { background: var(--accent); color: #fff; }
+    .btn--primary:hover { background: var(--accent-light); box-shadow: 0 0 20px var(--accent-glow); }
+
+    .btn--ghost {
+      background: rgba(255,255,255,0.05);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+    .btn--ghost:hover { background: rgba(255,255,255,0.08); color: var(--text); border-color: var(--border-hi); }
+
+    .btn--danger { background: rgba(248,113,113,0.15); color: var(--red); border: 1px solid rgba(248,113,113,0.25); }
+    .btn--danger:hover { background: rgba(248,113,113,0.22); }
+
+    .btn--green { background: rgba(74,222,128,0.15); color: var(--green); border: 1px solid rgba(74,222,128,0.25); }
+    .btn--green:hover { background: rgba(74,222,128,0.22); }
+
+    .btn--sm { padding: 6px 14px; font-size: 0.8rem; }
+    .btn--lg { padding: 13px 26px; font-size: 1rem; }
+    .btn--full { width: 100%; }
+
+    /* ── Form fields ── */
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .field-group:last-child { margin-bottom: 0; }
+
+    .field-group label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.01em;
+    }
+
+    .field-group input,
+    .field-group select,
+    .field-group textarea {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 13px;
+      color: var(--text);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color var(--t), box-shadow var(--t);
+    }
+
+    .field-group input:focus,
+    .field-group select:focus,
+    .field-group textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-dim);
+    }
+
+    .field-group textarea {
+      resize: vertical;
+      min-height: 80px;
+      line-height: 1.55;
+    }
+
+    /* ── Login screen ── */
+    #login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(92,107,252,0.12), transparent 70%);
+    }
+
+    .login-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+    }
+
+    .login-logo {
+      font-size: 1.15rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      color: var(--text);
+    }
+
+    .login-logo span {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      display: block;
+      margin-top: 4px;
+    }
+
+    .login-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: -4px;
+    }
+
+    .login-sub {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    #login-error {
+      font-size: 0.85rem;
+      color: var(--red);
+      min-height: 20px;
+      text-align: center;
+    }
+
+    /* ── Admin shell ── */
+    #admin-panel {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 0 28px;
+      height: 64px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .admin-header-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-header-logo::before {
+      content: '';
+      display: block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+    }
+
+    .admin-header-logo span {
+      color: var(--accent);
+    }
+
+    .admin-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Tab nav */
+    .tab-nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0 28px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: color var(--t), border-color var(--t);
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover { color: var(--text); }
+
+    .tab-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    /* Tab content */
+    .admin-body {
+      flex: 1;
+      padding: 32px 28px;
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ── Section headings inside tabs ── */
+    .admin-section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .admin-section-sub {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    /* ── Service editor cards ── */
+    .service-editor-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .service-editor-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 24px;
+      cursor: pointer;
+      user-select: none;
+      transition: background var(--t);
+    }
+
+    .service-editor-header:hover { background: rgba(255,255,255,0.025); }
+
+    .service-editor-header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .service-editor-icon {
+      font-size: 1.25rem;
+      color: var(--accent);
+      width: 36px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .service-editor-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.015em;
+    }
+
+    .service-editor-price {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .service-editor-toggle {
+      font-size: 1.1rem;
+      color: var(--text-dim);
+      transition: transform var(--t);
+      flex-shrink: 0;
+    }
+
+    .service-editor-card.open .service-editor-toggle {
+      transform: rotate(180deg);
+    }
+
+    .service-editor-body {
+      display: none;
+      padding: 0 24px 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .service-editor-card.open .service-editor-body {
+      display: block;
+    }
+
+    /* Features list editor */
+    .features-editor {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .feature-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .feature-row input {
+      flex: 1;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      color: var(--text);
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color var(--t), box-shadow var(--t);
+    }
+
+    .feature-row input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-dim);
+    }
+
+    .feature-row .btn-remove {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      line-height: 1;
+      transition: color var(--t), background var(--t);
+      flex-shrink: 0;
+    }
+
+    .feature-row .btn-remove:hover {
+      color: var(--red);
+      background: rgba(248,113,113,0.1);
+    }
+
+    .badge-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    /* ── Meta editor ── */
+    .meta-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 28px 24px;
+      margin-bottom: 20px;
+    }
+
+    .meta-card h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Password change ── */
+    .password-note {
+      font-size: 0.8rem;
+      color: var(--orange);
+      background: rgba(251,146,60,0.1);
+      border: 1px solid rgba(251,146,60,0.2);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+    }
+
+    /* ── Deployment guide ── */
+    .deploy-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 32px 28px;
+      margin-bottom: 20px;
+    }
+
+    .deploy-step {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .deploy-step:last-child { margin-bottom: 0; }
+
+    .deploy-step-num {
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      border-radius: 50%;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .deploy-step-content h4 {
+      font-size: 0.975rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+      letter-spacing: -0.015em;
+    }
+
+    .deploy-step-content p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    .deploy-step-content code {
+      font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+      font-size: 0.82rem;
+      background: rgba(92,107,252,0.1);
+      border: 1px solid var(--accent-border);
+      color: var(--accent-light);
+      padding: 2px 7px;
+      border-radius: 5px;
+    }
+
+    .deploy-step-content pre {
+      font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+      font-size: 0.82rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 14px 16px;
+      border-radius: 10px;
+      margin-top: 10px;
+      overflow-x: auto;
+      line-height: 1.7;
+    }
+
+    .deploy-note {
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .deploy-note strong { color: var(--accent-light); }
+
+    /* ── Save/status banner ── */
+    #status-bar {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--card2);
+      border: 1px solid var(--border-hi);
+      border-radius: var(--radius-full);
+      padding: 12px 24px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      z-index: 999;
+      white-space: nowrap;
+      transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+
+    #status-bar.show { transform: translateX(-50%) translateY(0); }
+    #status-bar.success { color: var(--green); border-color: rgba(74,222,128,0.3); }
+    #status-bar.info    { color: var(--accent-light); }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .admin-header { padding: 0 16px; }
+      .tab-nav { padding: 0 16px; overflow-x: auto; }
+      .admin-body { padding: 20px 16px; }
+      .login-card { padding: 32px 24px; }
+      .two-col { grid-template-columns: 1fr; }
+      .badge-row { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── LOGIN SCREEN ── -->
+  <div id="login-screen">
+    <div class="login-card">
+      <div class="login-logo">
+        NEILZ NETWORK
+        <span>ADMIN PANEL</span>
+      </div>
+      <div>
+        <h2 class="login-title">Welcome back</h2>
+        <p class="login-sub" style="margin-top:8px;">Enter your admin password to manage site content.</p>
+      </div>
+      <div class="field-group" style="margin-bottom:0;">
+        <label for="pw-input">Password</label>
+        <input type="password" id="pw-input" placeholder="Enter password" autocomplete="current-password">
+      </div>
+      <button class="btn btn--primary btn--lg btn--full" id="login-btn">Login →</button>
+      <p id="login-error"></p>
+      <p style="font-size:0.78rem;color:var(--text-dim);text-align:center;">
+        Password is set in <code style="color:var(--accent-light);background:var(--accent-dim);padding:1px 5px;border-radius:4px;font-size:0.75rem;">data/services.json</code>
+      </p>
+    </div>
+  </div>
+
+  <!-- ── ADMIN PANEL ── -->
+  <div id="admin-panel" class="hidden">
+
+    <!-- Header -->
+    <header class="admin-header">
+      <div class="admin-header-logo">
+        NEILZ NETWORK <span>ADMIN</span>
+      </div>
+      <div class="admin-header-actions">
+        <a href="../" class="btn btn--ghost btn--sm" target="_blank">← View Site</a>
+        <button class="btn btn--green btn--sm" id="download-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download services.json
+        </button>
+      </div>
+    </header>
+
+    <!-- Tab Nav -->
+    <nav class="tab-nav" aria-label="Admin tabs">
+      <button class="tab-btn active" data-tab="services">Services</button>
+      <button class="tab-btn" data-tab="site-info">Site Info</button>
+      <button class="tab-btn" data-tab="deploy">Deploy Guide</button>
+    </nav>
+
+    <!-- Body -->
+    <main class="admin-body">
+
+      <!-- SERVICES TAB -->
+      <div id="tab-services" class="tab-content active">
+        <h2 class="admin-section-title">Edit Services</h2>
+        <p class="admin-section-sub">Changes are saved in memory. Click <strong style="color:var(--text);">Download services.json</strong> to export, then replace the file in your repo.</p>
+        <div id="services-editor"></div>
+      </div>
+
+      <!-- SITE INFO TAB -->
+      <div id="tab-site-info" class="tab-content">
+        <h2 class="admin-section-title">Site Information</h2>
+        <p class="admin-section-sub">Edit your name, email, tagline, about text, and admin password.</p>
+        <div id="meta-editor"></div>
+      </div>
+
+      <!-- DEPLOY TAB -->
+      <div id="tab-deploy" class="tab-content">
+        <h2 class="admin-section-title">GitHub Pages Deployment Guide</h2>
+        <p class="admin-section-sub">Follow these steps to publish or update your Neilz Network site.</p>
+
+        <div class="deploy-note">
+          <strong>How updates work:</strong> Edit content in the admin panel → Download <code>services.json</code> → Replace the file in your repository → Push to GitHub. The site updates automatically within ~60 seconds.
+        </div>
+
+        <div class="deploy-card">
+          <div class="deploy-step">
+            <div class="deploy-step-num">1</div>
+            <div class="deploy-step-content">
+              <h4>Create a GitHub Account & Repository</h4>
+              <p>Go to <code>github.com</code>, create a free account, then click <strong style="color:var(--text);">New Repository</strong>. Name it something like <code>neilznetwork</code>. Set it to <strong style="color:var(--text);">Public</strong> and leave everything else default.</p>
+            </div>
+          </div>
+          <div class="deploy-step">
+            <div class="deploy-step-num">2</div>
+            <div class="deploy-step-content">
+              <h4>Install Git & Upload Your Files</h4>
+              <p>Download Git from <code>git-scm.com</code>. Then open a terminal in your site folder and run:</p>
+              <pre>git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
+git push -u origin main</pre>
+              <p style="margin-top:10px;">Replace <code>YOUR_USERNAME</code> and <code>YOUR_REPO</code> with your real values.</p>
+            </div>
+          </div>
+          <div class="deploy-step">
+            <div class="deploy-step-num">3</div>
+            <div class="deploy-step-content">
+              <h4>Enable GitHub Pages</h4>
+              <p>In your repository, go to <strong style="color:var(--text);">Settings → Pages</strong>. Under <em>Source</em>, select <code>Deploy from a branch</code>, choose <code>main</code> branch and <code>/ (root)</code> folder. Click <strong style="color:var(--text);">Save</strong>.</p>
+              <p style="margin-top:8px;">Your site will be live at: <code>https://YOUR_USERNAME.github.io/YOUR_REPO/</code></p>
+            </div>
+          </div>
+          <div class="deploy-step">
+            <div class="deploy-step-num">4</div>
+            <div class="deploy-step-content">
+              <h4>Connect a Custom Domain (Optional)</h4>
+              <p>In <strong style="color:var(--text);">Settings → Pages → Custom domain</strong>, enter your domain (e.g. <code>neilznetwork.com</code>). Then update your domain's DNS:</p>
+              <pre>A     @    185.199.108.153
+A     @    185.199.109.153
+A     @    185.199.110.153
+A     @    185.199.111.153
+CNAME www  YOUR_USERNAME.github.io</pre>
+              <p style="margin-top:8px;">DNS changes take up to 24 hours. Enable <strong style="color:var(--text);">Enforce HTTPS</strong> once the domain is verified.</p>
+            </div>
+          </div>
+          <div class="deploy-step">
+            <div class="deploy-step-num">5</div>
+            <div class="deploy-step-content">
+              <h4>Updating Your Content</h4>
+              <p>Whenever you make changes in this admin panel:</p>
+              <pre>1. Click "Download services.json" above
+2. Replace /data/services.json in your project folder
+3. Run these commands:
+
+git add data/services.json
+git commit -m "Update services content"
+git push</pre>
+              <p style="margin-top:8px;">GitHub Pages will rebuild and your changes will be live within about a minute.</p>
+            </div>
+          </div>
+          <div class="deploy-step">
+            <div class="deploy-step-num">6</div>
+            <div class="deploy-step-content">
+              <h4>Set Up the Contact Form (Optional but Recommended)</h4>
+              <p>The contact form uses <code>mailto:</code> by default. For a real form submission, sign up free at <code>formspree.io</code>, create a form, and replace the form's <code>action</code> attribute in <code>index.html</code>:</p>
+              <pre>&lt;form action="https://formspree.io/f/YOUR_FORM_ID" method="POST"&gt;</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Status bar -->
+  <div id="status-bar"></div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

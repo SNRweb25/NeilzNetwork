@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neilz Network — Professional Web Design & Hosting</title>
+  <meta name="description" content="Professional web design and hosting for small businesses, freelancers, and entrepreneurs. Sites that work as hard as you do.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ── NAV ── -->
+  <nav class="nav" id="nav">
+    <div class="container nav__inner">
+      <a href="#" class="nav__logo">
+        <span class="logo-text">NEILZ</span>
+        <span class="logo-sub">NETWORK</span>
+      </a>
+      <ul class="nav__links" id="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#contact" class="btn btn--sm btn--primary">Get Started</a></li>
+      </ul>
+      <button class="nav__hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section class="hero" id="hero">
+    <div class="hero__bg">
+      <div class="hero__grid"></div>
+      <div class="hero__orb hero__orb--1"></div>
+      <div class="hero__orb hero__orb--2"></div>
+    </div>
+    <div class="container hero__inner">
+      <div class="hero__badge">
+        <span class="hero__badge-dot"></span>
+        Web Design &amp; Hosting
+      </div>
+      <h1 class="hero__headline" id="hero-headline">
+        Websites That Work<br>As Hard As You Do
+      </h1>
+      <p class="hero__sub" id="hero-sub">
+        Professional web design &amp; hosting for small businesses, freelancers, and entrepreneurs.
+      </p>
+      <div class="hero__ctas">
+        <a href="#services" class="btn btn--primary btn--lg" id="hero-cta">See My Services</a>
+        <a href="#about" class="btn btn--ghost btn--lg">Meet Skye</a>
+      </div>
+      <div class="hero__stats">
+        <div class="stat">
+          <span class="stat__num">100%</span>
+          <span class="stat__label">Custom Built</span>
+        </div>
+        <div class="stat__divider"></div>
+        <div class="stat">
+          <span class="stat__num">7–14</span>
+          <span class="stat__label">Day Delivery</span>
+        </div>
+        <div class="stat__divider"></div>
+        <div class="stat">
+          <span class="stat__num">$499</span>
+          <span class="stat__label">Starting Price</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero__scroll-indicator" aria-hidden="true">
+      <span></span>
+    </div>
+  </section>
+
+  <!-- ── ABOUT ── -->
+  <section class="about section" id="about">
+    <div class="container about__inner">
+      <div class="about__visual" aria-hidden="true">
+        <div class="about__avatar-wrap">
+          <div class="about__avatar">
+            <span class="about__initials" id="about-initials">SN</span>
+          </div>
+          <div class="about__avatar-ring about__avatar-ring--1"></div>
+          <div class="about__avatar-ring about__avatar-ring--2"></div>
+        </div>
+        <div class="about__tag about__tag--1">Web Designer</div>
+        <div class="about__tag about__tag--2">Developer</div>
+      </div>
+      <div class="about__content">
+        <div class="section-label">About</div>
+        <h2 class="section-title" id="about-title">Meet Skye</h2>
+        <p class="about__text" id="about-text">
+          Hi, I'm Skye Neilz — the designer, developer, and host behind Neilz Network.
+        </p>
+        <div class="about__skills">
+          <span class="skill-tag">Web Design</span>
+          <span class="skill-tag">Frontend Dev</span>
+          <span class="skill-tag">Managed Hosting</span>
+          <span class="skill-tag">SEO Basics</span>
+        </div>
+        <a href="#contact" class="btn btn--primary">Work With Me →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SERVICES ── -->
+  <section class="services section" id="services">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Services</div>
+        <h2 class="section-title">What I Offer</h2>
+        <p class="section-sub">Transparent pricing. No hidden fees. No long-term contracts.</p>
+      </div>
+      <div class="services__grid" id="services-grid">
+        <!-- populated by main.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROCESS ── -->
+  <section class="process section" id="process">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Process</div>
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-sub">Simple, straightforward, and built around you.</p>
+      </div>
+      <div class="process__steps" id="process-steps">
+        <!-- populated by main.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ── -->
+  <section class="contact section" id="contact">
+    <div class="container contact__inner">
+      <div class="contact__content">
+        <div class="section-label">Contact</div>
+        <h2 class="section-title">Ready to Build<br>Something?</h2>
+        <p class="contact__sub">Tell me about your project and I'll get back to you within 24 hours.</p>
+        <div class="contact__details">
+          <a href="mailto:skye@neilznetwork.com" class="contact__email" id="contact-email">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="4" width="20" height="16" rx="2"/>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+            </svg>
+            <span id="contact-email-text">skye@neilznetwork.com</span>
+          </a>
+        </div>
+        <div class="contact__promise">
+          <div class="promise-item">
+            <span class="promise-check">✓</span> Response within 24 hours
+          </div>
+          <div class="promise-item">
+            <span class="promise-check">✓</span> Free discovery call included
+          </div>
+          <div class="promise-item">
+            <span class="promise-check">✓</span> No commitment required
+          </div>
+        </div>
+      </div>
+      <form class="contact__form" id="contact-form" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="contact-name">Your Name</label>
+            <input type="text" id="contact-name" name="name" placeholder="Jane Smith" required autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label for="contact-email-field">Email Address</label>
+            <input type="email" id="contact-email-field" name="email" placeholder="jane@yourbusiness.com" required autocomplete="email">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="contact-service">Interested In</label>
+          <select id="contact-service" name="service">
+            <option value="">Select a service…</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="contact-message">Tell Me About Your Project</label>
+          <textarea id="contact-message" name="message" rows="4" placeholder="What does your business do? What are you looking for in a website?"></textarea>
+        </div>
+        <button type="submit" class="btn btn--primary btn--full">
+          Send Message
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+        <p class="form-note" id="form-note" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__left">
+        <span class="footer__logo">NEILZ NETWORK</span>
+        <p class="footer__copy" id="footer-copy">© 2024 Neilz Network. All rights reserved.</p>
+      </div>
+      <div class="footer__right">
+        <nav class="footer__nav" aria-label="Footer navigation">
+          <a href="#about">About</a>
+          <a href="#services">Services</a>
+          <a href="#process">Process</a>
+          <a href="#contact">Contact</a>
+        </nav>
+        <!-- Hidden admin link — do not style obviously -->
+        <a href="admin/" class="footer__admin-link" tabindex="-1" aria-hidden="true">&middot;</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

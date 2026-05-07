@@ -1,0 +1,95 @@
+{
+  "adminPassword": "neilznetwork2024",
+  "meta": {
+    "businessName": "Neilz Network",
+    "ownerName": "Skye Neilz",
+    "email": "skye@neilznetwork.com",
+    "phone": "",
+    "tagline": "Websites That Work As Hard As You Do",
+    "subtitle": "Professional web design & hosting for small businesses, freelancers, and entrepreneurs.",
+    "aboutTitle": "Meet Skye",
+    "aboutText": "Hi, I'm Skye Neilz — the designer, developer, and host behind Neilz Network. I build clean, fast, and conversion-focused websites that help real businesses grow online. No bloated templates, no confusing tech — just sharp sites that make your brand look like it means business. Whether you need a brand-new site or a reliable home for an existing one, I handle everything so you can focus on running your business.",
+    "footerText": "© 2024 Neilz Network. All rights reserved.",
+    "heroCtaText": "See My Services",
+    "heroCtaLink": "#services",
+    "contactCtaText": "Get In Touch"
+  },
+  "services": [
+    {
+      "id": "design-build",
+      "icon": "✦",
+      "name": "Website Design & Build",
+      "description": "A fully custom website built from scratch — no page builders, no bloat. Designed to load fast, look sharp, and convert visitors into customers.",
+      "price": "$499",
+      "priceNote": "one-time",
+      "badge": "",
+      "features": [
+        "Custom design tailored to your brand",
+        "Mobile-first responsive layout",
+        "Up to 5 pages",
+        "Contact form integration",
+        "Basic SEO setup",
+        "1 round of revisions included",
+        "Delivered in 7–14 days"
+      ]
+    },
+    {
+      "id": "build-hosting",
+      "icon": "★",
+      "name": "Build + Hosting Bundle",
+      "description": "Everything in the Design & Build package, plus managed hosting through Neilz Network. One point of contact for your entire web presence.",
+      "price": "$599",
+      "priceNote": "+ $25/mo hosting",
+      "badge": "Most Popular",
+      "features": [
+        "Everything in Design & Build",
+        "Managed hosting on our servers",
+        "Free SSL certificate",
+        "Monthly backups",
+        "Uptime monitoring",
+        "Priority email support",
+        "Easy updates & edits"
+      ]
+    },
+    {
+      "id": "hosting-only",
+      "icon": "◈",
+      "name": "Hosting Only",
+      "description": "Already have a site? Move it to Neilz Network hosting for reliable uptime, fast speeds, and a developer you can actually reach.",
+      "price": "$25",
+      "priceNote": "per month",
+      "badge": "",
+      "features": [
+        "Reliable managed hosting",
+        "Free SSL certificate",
+        "Monthly backups",
+        "Uptime monitoring",
+        "Email & chat support",
+        "Easy domain connection",
+        "Cancel anytime"
+      ]
+    }
+  ],
+  "processSteps": [
+    {
+      "number": "01",
+      "title": "Discovery Call",
+      "description": "We start with a quick chat about your business, your goals, and what kind of site you need. No hard sell — just a real conversation."
+    },
+    {
+      "number": "02",
+      "title": "Design & Build",
+      "description": "I design and develop your site, keeping you updated along the way. You'll see the work before it goes live."
+    },
+    {
+      "number": "03",
+      "title": "Review & Revise",
+      "description": "You get a full preview of the finished site. We'll fine-tune anything that needs adjusting until you're happy with every detail."
+    },
+    {
+      "number": "04",
+      "title": "Launch",
+      "description": "We push your site live and you're open for business. If you're on a hosting plan, I handle everything behind the scenes."
+    }
+  ]
+}
