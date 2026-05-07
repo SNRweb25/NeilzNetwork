@@ -1,6 +1,6 @@
 # Neilz Network Website
 
-Professional web design & hosting portfolio for Neilz Network, built by Skye Neilz.
+Professional web design & hosting portfolio for Neilz Network, built by Simon Neilz.
 
 **Tech stack:** Vanilla HTML, CSS, JavaScript — no frameworks, no build tools. Works on GitHub Pages out of the box.
 
@@ -177,4 +177,4 @@ For proper server-side form submissions (so you receive emails directly):
 
 ---
 
-*Built with ♦ by Skye Neilz — Neilz Network*
+*Built with ♦ by Simon Neilz — Neilz Network*

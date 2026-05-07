@@ -6,29 +6,30 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:           #08080f;
-  --surface:      #0d0d1a;
-  --card:         #121220;
-  --card-hover:   #171728;
-  --border:       rgba(255, 255, 255, 0.07);
-  --border-hi:    rgba(255, 255, 255, 0.12);
+  /* ── Coffee + Bash Green theme ── */
+  --bg:           #0d0a06;   /* deep espresso */
+  --surface:      #141009;   /* dark roast */
+  --card:         #1c160d;   /* coffee ground */
+  --card-hover:   #241d12;   /* medium roast */
+  --border:       rgba(210, 170, 100, 0.09);
+  --border-hi:    rgba(210, 170, 100, 0.18);
 
-  --accent:       #5c6bfc;
-  --accent-light: #7a87fd;
-  --accent-dim:   rgba(92, 107, 252, 0.14);
-  --accent-glow:  rgba(92, 107, 252, 0.28);
-  --accent-border:rgba(92, 107, 252, 0.35);
+  --accent:       #3ddc68;   /* bash / terminal green */
+  --accent-light: #5eed82;
+  --accent-dim:   rgba(61, 220, 104, 0.13);
+  --accent-glow:  rgba(61, 220, 104, 0.26);
+  --accent-border:rgba(61, 220, 104, 0.38);
 
-  --gold:         #f5a623;
-  --gold-dim:     rgba(245, 166, 35, 0.13);
-  --gold-border:  rgba(245, 166, 35, 0.30);
+  --gold:         #e8973a;   /* caramel / coffee gold */
+  --gold-dim:     rgba(232, 151, 58, 0.13);
+  --gold-border:  rgba(232, 151, 58, 0.32);
 
-  --green:        #4ade80;
+  --green:        #3ddc68;
   --red:          #f87171;
 
-  --text:         #f0f0f8;
-  --text-muted:   #8888aa;
-  --text-dim:     #50505e;
+  --text:         #f4ead8;   /* warm cream */
+  --text-muted:   #a08868;   /* caramel */
+  --text-dim:     #524030;   /* dark mocha */
 
   --radius:       12px;
   --radius-lg:    18px;
@@ -203,27 +204,42 @@ img { display: block; max-width: 100%; }
 
 .nav__logo {
   display: flex;
-  align-items: baseline;
-  gap: 5px;
+  align-items: center;
+  gap: 10px;
   text-decoration: none;
   flex-shrink: 0;
 }
 
+/* Logo icon mark — inline SVG sized by CSS */
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.logo-wordmark {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  line-height: 1;
+}
+
 .logo-text {
   font-family: 'Syne', sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 800;
-  letter-spacing: 0.05em;
-  background: linear-gradient(135deg, #fff 30%, var(--accent-light) 100%);
+  letter-spacing: 0.08em;
+  background: linear-gradient(135deg, #f4ead8 40%, var(--accent-light) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .logo-sub {
-  font-size: 0.55rem;
+  font-size: 0.48rem;
   font-weight: 700;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--accent);
   -webkit-text-fill-color: var(--accent);
@@ -314,8 +330,8 @@ img { display: block; max-width: 100%; }
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(92, 107, 252, 0.055) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(92, 107, 252, 0.055) 1px, transparent 1px);
+    linear-gradient(rgba(61, 220, 104, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(61, 220, 104, 0.07) 1px, transparent 1px);
   background-size: 52px 52px;
   mask-image: radial-gradient(ellipse 80% 70% at 50% 10%, black 30%, transparent 100%);
   -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 10%, black 30%, transparent 100%);
@@ -331,7 +347,7 @@ img { display: block; max-width: 100%; }
 .hero__orb--1 {
   width: 700px;
   height: 700px;
-  background: radial-gradient(circle, rgba(92, 107, 252, 0.32), transparent 65%);
+  background: radial-gradient(circle, rgba(61, 220, 104, 0.18), transparent 65%);
   top: -250px;
   left: -150px;
   animation: orbFloat1 18s ease-in-out infinite;
@@ -340,7 +356,7 @@ img { display: block; max-width: 100%; }
 .hero__orb--2 {
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(220, 80, 180, 0.18), transparent 65%);
+  background: radial-gradient(circle, rgba(180, 100, 30, 0.22), transparent 65%);
   top: 80px;
   right: -120px;
   animation: orbFloat2 22s ease-in-out infinite;
@@ -533,16 +549,31 @@ img { display: block; max-width: 100%; }
 }
 
 .about__avatar {
-  width: 200px;
-  height: 200px;
-  border-radius: 28px;
-  background: linear-gradient(135deg, var(--accent-dim), rgba(220, 80, 180, 0.1));
-  border: 1px solid var(--accent-border);
+  width: 240px;
+  height: 290px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, var(--accent-dim), rgba(13, 27, 62, 0.4));
+  border: 2px solid var(--accent-border);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   z-index: 2;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(26, 111, 212, 0.2);
+}
+
+.about__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.about__avatar:hover .about__photo {
+  transform: scale(1.03);
 }
 
 .about__initials {
@@ -561,15 +592,15 @@ img { display: block; max-width: 100%; }
 }
 
 .about__avatar-ring--1 {
-  width: 232px;
-  height: 232px;
+  width: 268px;
+  height: 316px;
   opacity: 0.35;
   animation: ringPulse 3s ease infinite;
 }
 
 .about__avatar-ring--2 {
-  width: 268px;
-  height: 268px;
+  width: 300px;
+  height: 350px;
   opacity: 0.15;
   animation: ringPulse 3s ease 1s infinite;
 }

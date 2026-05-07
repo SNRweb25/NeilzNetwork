@@ -16,8 +16,28 @@
   <nav class="nav" id="nav">
     <div class="container nav__inner">
       <a href="#" class="nav__logo">
-        <span class="logo-text">NEILZ</span>
-        <span class="logo-sub">NETWORK</span>
+        <!-- Icon mark — N with orbital arc -->
+        <svg class="logo-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="arcG" x1="65" y1="8" x2="20" y2="72" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#5eed82"/>
+              <stop offset="100%" stop-color="#28a84e"/>
+            </linearGradient>
+          </defs>
+          <!-- Bold N lettermark -->
+          <path d="M10 68 L10 12 L23 12 L50 50 L50 12 L62 12 L62 68 L49 68 L22 30 L22 68 Z" fill="#f4ead8"/>
+          <!-- Orbital arc sweeping right side -->
+          <path d="M62 8 A38 38 0 0 1 72 64" stroke="url(#arcG)" stroke-width="3.5" stroke-linecap="round"/>
+          <!-- Arc bottom-left -->
+          <path d="M8 18 A38 38 0 0 0 18 72" stroke="url(#arcG)" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+          <!-- Nodes -->
+          <circle cx="62" cy="8"  r="4.5" fill="#3ddc68"/>
+          <circle cx="18" cy="72" r="3.5" fill="none" stroke="#3ddc68" stroke-width="2"/>
+        </svg>
+        <div class="logo-wordmark">
+          <span class="logo-text">NEILZ</span>
+          <span class="logo-sub">— NETWORK —</span>
+        </div>
       </a>
       <ul class="nav__links" id="nav-links">
         <li><a href="#about">About</a></li>
@@ -51,7 +71,7 @@
       </p>
       <div class="hero__ctas">
         <a href="#services" class="btn btn--primary btn--lg" id="hero-cta">See My Services</a>
-        <a href="#about" class="btn btn--ghost btn--lg">Meet Skye</a>
+        <a href="#about" class="btn btn--ghost btn--lg">Meet Simon</a>
       </div>
       <div class="hero__stats">
         <div class="stat">
@@ -78,10 +98,16 @@
   <!-- ── ABOUT ── -->
   <section class="about section" id="about">
     <div class="container about__inner">
-      <div class="about__visual" aria-hidden="true">
+      <div class="about__visual">
         <div class="about__avatar-wrap">
           <div class="about__avatar">
-            <span class="about__initials" id="about-initials">SN</span>
+            <img
+              src="assets/simon.jpg"
+              alt="Simon Neilz — Neilz Network"
+              class="about__photo"
+              onerror="this.style.display='none';document.getElementById('about-initials').style.display='flex';"
+            >
+            <span class="about__initials" id="about-initials" style="display:none;">SN</span>
           </div>
           <div class="about__avatar-ring about__avatar-ring--1"></div>
           <div class="about__avatar-ring about__avatar-ring--2"></div>
@@ -196,7 +222,7 @@
   <footer class="footer">
     <div class="container footer__inner">
       <div class="footer__left">
-        <span class="footer__logo">NEILZ NETWORK</span>
+        <span class="footer__logo">NEILZ <span style="color:var(--accent);letter-spacing:0.22em;font-size:0.68rem;">— NETWORK —</span></span>
         <p class="footer__copy" id="footer-copy">© 2024 Neilz Network. All rights reserved.</p>
       </div>
       <div class="footer__right">
