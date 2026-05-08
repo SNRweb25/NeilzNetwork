@@ -6,30 +6,30 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* ── Coffee + Bash Green theme ── */
-  --bg:           #0d0a06;   /* deep espresso */
-  --surface:      #141009;   /* dark roast */
-  --card:         #1c160d;   /* coffee ground */
-  --card-hover:   #241d12;   /* medium roast */
-  --border:       rgba(210, 170, 100, 0.09);
-  --border-hi:    rgba(210, 170, 100, 0.18);
+  /* ── Neutral Elegance — #FFDBBB · #CCBEB1 · #997E67 · #664930 ── */
+  --bg:           #100a06;   /* near-black espresso */
+  --surface:      #181009;   /* dark roast */
+  --card:         #20150d;   /* coffee ground */
+  --card-hover:   #2a1c12;   /* medium roast */
+  --border:       rgba(204, 190, 177, 0.10);
+  --border-hi:    rgba(204, 190, 177, 0.20);
 
-  --accent:       #3ddc68;   /* bash / terminal green */
-  --accent-light: #5eed82;
-  --accent-dim:   rgba(61, 220, 104, 0.13);
-  --accent-glow:  rgba(61, 220, 104, 0.26);
-  --accent-border:rgba(61, 220, 104, 0.38);
+  --accent:       #997E67;   /* #997E67 warm walnut */
+  --accent-light: #CCBEB1;   /* #CCBEB1 taupe */
+  --accent-dim:   rgba(153, 126, 103, 0.15);
+  --accent-glow:  rgba(153, 126, 103, 0.28);
+  --accent-border:rgba(153, 126, 103, 0.45);
 
-  --gold:         #e8973a;   /* caramel / coffee gold */
-  --gold-dim:     rgba(232, 151, 58, 0.13);
-  --gold-border:  rgba(232, 151, 58, 0.32);
+  --gold:         #FFDBBB;   /* #FFDBBB peach cream — badges */
+  --gold-dim:     rgba(255, 219, 187, 0.12);
+  --gold-border:  rgba(255, 219, 187, 0.30);
 
-  --green:        #3ddc68;
-  --red:          #f87171;
+  --green:        #CCBEB1;
+  --red:          #d4826a;
 
-  --text:         #f4ead8;   /* warm cream */
-  --text-muted:   #a08868;   /* caramel */
-  --text-dim:     #524030;   /* dark mocha */
+  --text:         #FFDBBB;   /* #FFDBBB warm cream — primary text */
+  --text-muted:   #CCBEB1;   /* #CCBEB1 taupe — body copy */
+  --text-dim:     #664930;   /* #664930 espresso — hints/placeholders */
 
   --radius:       12px;
   --radius-lg:    18px;
@@ -156,7 +156,7 @@ img { display: block; max-width: 100%; }
 
 .btn--primary {
   background: var(--accent);
-  color: #fff;
+  color: #FFDBBB;
 }
 .btn--primary:hover {
   background: var(--accent-light);
@@ -189,7 +189,7 @@ img { display: block; max-width: 100%; }
 }
 
 .nav.scrolled {
-  background: rgba(8, 8, 15, 0.88);
+  background: rgba(16, 10, 6, 0.92);
   backdrop-filter: blur(20px) saturate(1.4);
   -webkit-backdrop-filter: blur(20px) saturate(1.4);
   border-bottom-color: var(--border);
@@ -298,7 +298,7 @@ img { display: block; max-width: 100%; }
   top: var(--nav-h);
   left: 0;
   right: 0;
-  background: rgba(8, 8, 15, 0.97);
+  background: rgba(16, 10, 6, 0.97);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border-bottom: 1px solid var(--border);
@@ -330,8 +330,8 @@ img { display: block; max-width: 100%; }
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(61, 220, 104, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(61, 220, 104, 0.07) 1px, transparent 1px);
+    linear-gradient(rgba(153, 126, 103, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(153, 126, 103, 0.09) 1px, transparent 1px);
   background-size: 52px 52px;
   mask-image: radial-gradient(ellipse 80% 70% at 50% 10%, black 30%, transparent 100%);
   -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 10%, black 30%, transparent 100%);
@@ -347,7 +347,7 @@ img { display: block; max-width: 100%; }
 .hero__orb--1 {
   width: 700px;
   height: 700px;
-  background: radial-gradient(circle, rgba(61, 220, 104, 0.18), transparent 65%);
+  background: radial-gradient(circle, rgba(153, 126, 103, 0.22), transparent 65%);
   top: -250px;
   left: -150px;
   animation: orbFloat1 18s ease-in-out infinite;
@@ -356,7 +356,7 @@ img { display: block; max-width: 100%; }
 .hero__orb--2 {
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(180, 100, 30, 0.22), transparent 65%);
+  background: radial-gradient(circle, rgba(102, 73, 48, 0.40), transparent 65%);
   top: 80px;
   right: -120px;
   animation: orbFloat2 22s ease-in-out infinite;
@@ -552,7 +552,7 @@ img { display: block; max-width: 100%; }
   width: 240px;
   height: 290px;
   border-radius: 24px;
-  background: linear-gradient(135deg, var(--accent-dim), rgba(13, 27, 62, 0.4));
+  background: linear-gradient(135deg, var(--accent-dim), rgba(102, 73, 48, 0.25));
   border: 2px solid var(--accent-border);
   display: flex;
   align-items: center;
@@ -560,7 +560,7 @@ img { display: block; max-width: 100%; }
   position: relative;
   z-index: 2;
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(26, 111, 212, 0.2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(153, 126, 103, 0.25);
 }
 
 .about__photo {
@@ -697,19 +697,19 @@ img { display: block; max-width: 100%; }
 .service-card:hover {
   border-color: var(--accent-border);
   transform: translateY(-6px);
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(92, 107, 252, 0.12);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(153, 126, 103, 0.15);
 }
 
 .service-card:hover::before { opacity: 1; }
 
 .service-card--featured {
   border-color: var(--accent-border);
-  background: linear-gradient(175deg, rgba(92, 107, 252, 0.09) 0%, var(--card) 55%);
-  box-shadow: 0 0 0 1px rgba(92, 107, 252, 0.14), 0 16px 48px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(175deg, rgba(153, 126, 103, 0.08) 0%, var(--card) 55%);
+  box-shadow: 0 0 0 1px rgba(153, 126, 103, 0.15), 0 16px 48px rgba(0, 0, 0, 0.3);
 }
 
 .service-card--featured:hover {
-  box-shadow: 0 0 0 1px rgba(92, 107, 252, 0.45), 0 28px 80px rgba(92, 107, 252, 0.18);
+  box-shadow: 0 0 0 1px rgba(153, 126, 103, 0.45), 0 28px 80px rgba(153, 126, 103, 0.18);
 }
 
 .service-card__badge {
@@ -796,7 +796,7 @@ img { display: block; max-width: 100%; }
   height: 17px;
   min-width: 17px;
   background: var(--accent-dim);
-  border: 1px solid rgba(92, 107, 252, 0.3);
+  border: 1px solid rgba(153, 126, 103, 0.3);
   border-radius: 50%;
   font-size: 0.58rem;
   color: var(--accent);
@@ -952,8 +952,8 @@ img { display: block; max-width: 100%; }
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: rgba(74, 222, 128, 0.12);
-  border: 1px solid rgba(74, 222, 128, 0.3);
+  background: rgba(204, 190, 177, 0.12);
+  border: 1px solid rgba(204, 190, 177, 0.3);
   color: var(--green);
   font-size: 0.65rem;
   font-weight: 800;
@@ -1023,7 +1023,7 @@ img { display: block; max-width: 100%; }
 .form-group select:focus,
 .form-group textarea:focus {
   border-color: var(--accent);
-  background: rgba(8, 8, 15, 0.8);
+  background: rgba(16, 10, 6, 0.8);
   box-shadow: 0 0 0 3px var(--accent-dim);
 }
 
