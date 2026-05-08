@@ -163,8 +163,9 @@
   // ── Contact form ──────────────────────────────────────────
   const form = $('contact-form');
   const formNote = $('form-note');
+  const submitBtn = form.querySelector('[type="submit"]');
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const name    = form.querySelector('#contact-name').value.trim();
@@ -177,14 +178,41 @@
       return;
     }
 
-    const subject = encodeURIComponent(`Neilz Network Inquiry — ${service || 'General'}`);
-    const body    = encodeURIComponent(
-      `Name: ${name}\nEmail: ${email}\nService: ${service}\n\n${message}`
-    );
+    // Disable button while sending
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
 
-    window.location.href = `mailto:${meta.email}?subject=${subject}&body=${body}`;
-    showNote('Opening your email client…', 'success');
-    setTimeout(() => showNote('', ''), 5000);
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, service, message,
+          _subject: `Neilz Network Inquiry — ${service || 'General'}` })
+      });
+
+      if (res.ok) {
+        showNote('Message sent! I\'ll get back to you within 24 hours.', 'success');
+        form.reset();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        if (data.errors) {
+          showNote(data.errors.map(e => e.message).join(', '), 'error');
+        } else {
+          throw new Error('Server error');
+        }
+      }
+    } catch {
+      // Fallback: open mailto if Formspree isn't activated yet
+      const subject = encodeURIComponent(`Neilz Network Inquiry — ${service || 'General'}`);
+      const body    = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nService: ${service}\n\n${message}`);
+      window.location.href = `mailto:${meta.email}?subject=${subject}&body=${body}`;
+      showNote('Opening your email client as backup…', 'success');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = 'Send Message <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+    }
+
+    setTimeout(() => showNote('', ''), 7000);
   });
 
   function showNote(msg, type) {
