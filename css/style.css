@@ -6,30 +6,30 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* ── Neutral Elegance — #FFDBBB · #CCBEB1 · #997E67 · #664930 ── */
-  --bg:           #100a06;   /* near-black espresso */
-  --surface:      #181009;   /* dark roast */
-  --card:         #20150d;   /* coffee ground */
-  --card-hover:   #2a1c12;   /* medium roast */
-  --border:       rgba(204, 190, 177, 0.10);
-  --border-hi:    rgba(204, 190, 177, 0.20);
+  /* ── Neutral Elegance Light — warm cream & espresso ── */
+  --bg:           #FAF4EC;   /* warm cream */
+  --surface:      #F2E8D8;   /* toasted linen */
+  --card:         #FFFFFF;   /* white cards */
+  --card-hover:   #FEF9F3;   /* soft hover */
+  --border:       rgba(122, 92, 62, 0.18);
+  --border-hi:    rgba(122, 92, 62, 0.32);
 
-  --accent:       #997E67;   /* #997E67 warm walnut */
-  --accent-light: #CCBEB1;   /* #CCBEB1 taupe */
-  --accent-dim:   rgba(153, 126, 103, 0.15);
-  --accent-glow:  rgba(153, 126, 103, 0.28);
-  --accent-border:rgba(153, 126, 103, 0.45);
+  --accent:       #7A5C3E;   /* rich walnut — readable on cream */
+  --accent-light: #997E67;   /* medium walnut */
+  --accent-dim:   rgba(122, 92, 62, 0.09);
+  --accent-glow:  rgba(122, 92, 62, 0.20);
+  --accent-border:rgba(122, 92, 62, 0.28);
 
-  --gold:         #FFDBBB;   /* #FFDBBB peach cream — badges */
-  --gold-dim:     rgba(255, 219, 187, 0.12);
-  --gold-border:  rgba(255, 219, 187, 0.30);
+  --gold:         #664930;   /* espresso — badge text */
+  --gold-dim:     rgba(102, 73, 48, 0.08);
+  --gold-border:  rgba(102, 73, 48, 0.20);
 
-  --green:        #CCBEB1;
-  --red:          #d4826a;
+  --green:        #6b8f5e;
+  --red:          #b85a45;
 
-  --text:         #FFDBBB;   /* #FFDBBB warm cream — primary text */
-  --text-muted:   #CCBEB1;   /* #CCBEB1 taupe — body copy */
-  --text-dim:     #664930;   /* #664930 espresso — hints/placeholders */
+  --text:         #231008;   /* near-black espresso */
+  --text-muted:   #5C3D25;   /* rich espresso brown */
+  --text-dim:     #997E67;   /* walnut — hints/placeholders */
 
   --radius:       12px;
   --radius-lg:    18px;
@@ -156,10 +156,10 @@ img { display: block; max-width: 100%; }
 
 .btn--primary {
   background: var(--accent);
-  color: #FFDBBB;
+  color: #FAF4EC;
 }
 .btn--primary:hover {
-  background: var(--accent-light);
+  background: #664930;
   box-shadow: 0 0 28px var(--accent-glow);
   transform: translateY(-1px);
 }
@@ -173,7 +173,7 @@ img { display: block; max-width: 100%; }
 .btn--ghost:hover {
   color: var(--text);
   border-color: var(--border-hi);
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(122, 92, 62, 0.07);
 }
 
 /* ============================================================
@@ -189,7 +189,7 @@ img { display: block; max-width: 100%; }
 }
 
 .nav.scrolled {
-  background: rgba(16, 10, 6, 0.92);
+  background: rgba(250, 244, 236, 0.95);
   backdrop-filter: blur(20px) saturate(1.4);
   -webkit-backdrop-filter: blur(20px) saturate(1.4);
   border-bottom-color: var(--border);
@@ -230,7 +230,7 @@ img { display: block; max-width: 100%; }
   font-size: 1.25rem;
   font-weight: 800;
   letter-spacing: 0.08em;
-  background: linear-gradient(135deg, #f4ead8 40%, var(--accent-light) 100%);
+  background: linear-gradient(135deg, #3a1f0a 40%, var(--accent) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -262,7 +262,7 @@ img { display: block; max-width: 100%; }
 
 .nav__links a:not(.btn):hover {
   color: var(--text);
-  background: rgba(255,255,255,0.05);
+  background: rgba(122, 92, 62, 0.08);
 }
 
 .nav__hamburger {
@@ -298,7 +298,7 @@ img { display: block; max-width: 100%; }
   top: var(--nav-h);
   left: 0;
   right: 0;
-  background: rgba(16, 10, 6, 0.97);
+  background: rgba(250, 244, 236, 0.98);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border-bottom: 1px solid var(--border);
@@ -330,8 +330,8 @@ img { display: block; max-width: 100%; }
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(153, 126, 103, 0.09) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(153, 126, 103, 0.09) 1px, transparent 1px);
+    linear-gradient(rgba(122, 92, 62, 0.13) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(122, 92, 62, 0.13) 1px, transparent 1px);
   background-size: 52px 52px;
   mask-image: radial-gradient(ellipse 80% 70% at 50% 10%, black 30%, transparent 100%);
   -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 10%, black 30%, transparent 100%);
@@ -347,7 +347,7 @@ img { display: block; max-width: 100%; }
 .hero__orb--1 {
   width: 700px;
   height: 700px;
-  background: radial-gradient(circle, rgba(153, 126, 103, 0.22), transparent 65%);
+  background: radial-gradient(circle, rgba(255, 200, 150, 0.45), transparent 65%);
   top: -250px;
   left: -150px;
   animation: orbFloat1 18s ease-in-out infinite;
@@ -356,7 +356,7 @@ img { display: block; max-width: 100%; }
 .hero__orb--2 {
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(102, 73, 48, 0.40), transparent 65%);
+  background: radial-gradient(circle, rgba(204, 158, 110, 0.35), transparent 65%);
   top: 80px;
   right: -120px;
   animation: orbFloat2 22s ease-in-out infinite;
@@ -444,7 +444,7 @@ img { display: block; max-width: 100%; }
   gap: 36px;
   margin-top: 16px;
   padding: 22px 44px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.65);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   animation: fadeSlideDown 0.7s var(--ease) 0.4s both;
@@ -552,7 +552,7 @@ img { display: block; max-width: 100%; }
   width: 240px;
   height: 290px;
   border-radius: 24px;
-  background: linear-gradient(135deg, var(--accent-dim), rgba(102, 73, 48, 0.25));
+  background: linear-gradient(135deg, var(--accent-dim), rgba(122, 92, 62, 0.12));
   border: 2px solid var(--accent-border);
   display: flex;
   align-items: center;
@@ -560,7 +560,7 @@ img { display: block; max-width: 100%; }
   position: relative;
   z-index: 2;
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(153, 126, 103, 0.25);
+  box-shadow: 0 20px 60px rgba(100, 65, 30, 0.18), 0 0 0 1px rgba(122, 92, 62, 0.20);
 }
 
 .about__photo {
@@ -647,7 +647,7 @@ img { display: block; max-width: 100%; }
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--text-muted);
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(122, 92, 62, 0.07);
   border: 1px solid var(--border);
   padding: 6px 14px;
   border-radius: var(--radius-full);
@@ -697,19 +697,19 @@ img { display: block; max-width: 100%; }
 .service-card:hover {
   border-color: var(--accent-border);
   transform: translateY(-6px);
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(153, 126, 103, 0.15);
+  box-shadow: 0 24px 64px rgba(100, 65, 30, 0.14), 0 0 0 1px rgba(122, 92, 62, 0.15);
 }
 
 .service-card:hover::before { opacity: 1; }
 
 .service-card--featured {
   border-color: var(--accent-border);
-  background: linear-gradient(175deg, rgba(153, 126, 103, 0.08) 0%, var(--card) 55%);
-  box-shadow: 0 0 0 1px rgba(153, 126, 103, 0.15), 0 16px 48px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(175deg, rgba(122, 92, 62, 0.06) 0%, var(--card) 55%);
+  box-shadow: 0 0 0 1px rgba(122, 92, 62, 0.15), 0 16px 48px rgba(100, 65, 30, 0.10);
 }
 
 .service-card--featured:hover {
-  box-shadow: 0 0 0 1px rgba(153, 126, 103, 0.45), 0 28px 80px rgba(153, 126, 103, 0.18);
+  box-shadow: 0 0 0 1px rgba(122, 92, 62, 0.35), 0 28px 80px rgba(122, 92, 62, 0.14);
 }
 
 .service-card__badge {
@@ -952,9 +952,9 @@ img { display: block; max-width: 100%; }
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: rgba(204, 190, 177, 0.12);
-  border: 1px solid rgba(204, 190, 177, 0.3);
-  color: var(--green);
+  background: rgba(122, 92, 62, 0.10);
+  border: 1px solid rgba(122, 92, 62, 0.25);
+  color: var(--accent);
   font-size: 0.65rem;
   font-weight: 800;
   flex-shrink: 0;
@@ -1023,7 +1023,7 @@ img { display: block; max-width: 100%; }
 .form-group select:focus,
 .form-group textarea:focus {
   border-color: var(--accent);
-  background: rgba(16, 10, 6, 0.8);
+  background: rgba(255, 255, 255, 0.95);
   box-shadow: 0 0 0 3px var(--accent-dim);
 }
 
