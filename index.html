@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Neilz Network — Professional Web Design & Hosting</title>
+  <title>Neilz Network — Professional Web Design &amp; Hosting</title>
   <meta name="description" content="Professional web design and hosting for small businesses, freelancers, and entrepreneurs. Sites that work as hard as you do.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,7 +16,6 @@
   <nav class="nav" id="nav">
     <div class="container nav__inner">
       <a href="#" class="nav__logo">
-        <!-- Icon mark — N with orbital arc -->
         <svg class="logo-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <defs>
             <linearGradient id="arcG" x1="65" y1="8" x2="20" y2="72" gradientUnits="userSpaceOnUse">
@@ -24,13 +23,9 @@
               <stop offset="100%" stop-color="#997E67"/>
             </linearGradient>
           </defs>
-          <!-- Bold N lettermark -->
           <path d="M10 68 L10 12 L23 12 L50 50 L50 12 L62 12 L62 68 L49 68 L22 30 L22 68 Z" fill="#FFDBBB"/>
-          <!-- Orbital arc sweeping right side -->
           <path d="M62 8 A38 38 0 0 1 72 64" stroke="url(#arcG)" stroke-width="3.5" stroke-linecap="round"/>
-          <!-- Arc bottom-left -->
           <path d="M8 18 A38 38 0 0 0 18 72" stroke="url(#arcG)" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
-          <!-- Nodes -->
           <circle cx="62" cy="8"  r="4.5" fill="#CCBEB1"/>
           <circle cx="18" cy="72" r="3.5" fill="none" stroke="#CCBEB1" stroke-width="2"/>
         </svg>
@@ -40,16 +35,15 @@
         </div>
       </a>
       <ul class="nav__links" id="nav-links">
+        <!-- populated by main.js from navLinks JSON -->
         <li><a href="#about">About</a></li>
         <li><a href="#services">Services</a></li>
         <li><a href="#process">Process</a></li>
         <li><a href="#contact" class="btn btn--sm btn--primary">Get Started</a></li>
       </ul>
       <button class="nav__theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-        <!-- Moon (shown in light mode) -->
         <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        <!-- Sun (shown in dark mode) -->
-        <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="icon-sun"  width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
       </button>
       <button class="nav__hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -77,28 +71,13 @@
       </p>
       <div class="hero__ctas">
         <a href="#services" class="btn btn--primary btn--lg" id="hero-cta">See My Services</a>
-        <a href="#about" class="btn btn--ghost btn--lg">Meet Simon</a>
+        <a href="#about"    class="btn btn--ghost  btn--lg" id="hero-meet-btn">Meet Simon</a>
       </div>
-      <div class="hero__stats">
-        <div class="stat">
-          <span class="stat__num">100%</span>
-          <span class="stat__label">Custom Built</span>
-        </div>
-        <div class="stat__divider"></div>
-        <div class="stat">
-          <span class="stat__num">7–14</span>
-          <span class="stat__label">Day Delivery</span>
-        </div>
-        <div class="stat__divider"></div>
-        <div class="stat">
-          <span class="stat__num">$499</span>
-          <span class="stat__label">Starting Price</span>
-        </div>
+      <div class="hero__stats" id="hero-stats">
+        <!-- populated by main.js -->
       </div>
     </div>
-    <div class="hero__scroll-indicator" aria-hidden="true">
-      <span></span>
-    </div>
+    <div class="hero__scroll-indicator" aria-hidden="true"><span></span></div>
   </section>
 
   <!-- ── ABOUT ── -->
@@ -111,6 +90,7 @@
               src="assets/simon.jpg"
               alt="Simon Neilz — Neilz Network"
               class="about__photo"
+              id="about-photo"
               onerror="this.style.display='none';document.getElementById('about-initials').style.display='flex';"
             >
             <span class="about__initials" id="about-initials" style="display:none;">SN</span>
@@ -123,9 +103,9 @@
       </div>
       <div class="about__content">
         <div class="section-label">About</div>
-        <h2 class="section-title" id="about-title">Meet Skye</h2>
+        <h2 class="section-title" id="about-title">Meet Simon</h2>
         <p class="about__text" id="about-text">
-          Hi, I'm Skye Neilz — the designer, developer, and host behind Neilz Network.
+          Hi, I'm Simon Neilz — the designer, developer, and host behind Neilz Network.
         </p>
         <div class="about__skills">
           <span class="skill-tag">Web Design</span>
@@ -171,8 +151,8 @@
     <div class="container contact__inner">
       <div class="contact__content">
         <div class="section-label">Contact</div>
-        <h2 class="section-title">Ready to Build<br>Something?</h2>
-        <p class="contact__sub">Tell me about your project and I'll get back to you within 24 hours.</p>
+        <h2 class="section-title" id="contact-title">Ready to Build<br>Something?</h2>
+        <p class="contact__sub" id="contact-sub">Tell me about your project and I'll get back to you within 24 hours.</p>
         <div class="contact__details">
           <a href="mailto:simonneilzreid@gmail.com" class="contact__email" id="contact-email">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -182,16 +162,8 @@
             <span id="contact-email-text">simonneilzreid@gmail.com</span>
           </a>
         </div>
-        <div class="contact__promise">
-          <div class="promise-item">
-            <span class="promise-check">✓</span> Response within 24 hours
-          </div>
-          <div class="promise-item">
-            <span class="promise-check">✓</span> Free discovery call included
-          </div>
-          <div class="promise-item">
-            <span class="promise-check">✓</span> No commitment required
-          </div>
+        <div class="contact__promise" id="promise-list">
+          <!-- populated by main.js -->
         </div>
       </div>
       <form class="contact__form" id="contact-form" action="https://formspree.io/f/simonneilzreid@gmail.com" method="POST" novalidate>
@@ -229,16 +201,15 @@
     <div class="container footer__inner">
       <div class="footer__left">
         <span class="footer__logo">NEILZ <span style="color:var(--accent);letter-spacing:0.22em;font-size:0.68rem;">— NETWORK —</span></span>
-        <p class="footer__copy" id="footer-copy">© 2024 Neilz Network. All rights reserved.</p>
+        <p class="footer__copy" id="footer-copy">© 2025 Neilz Network. All rights reserved.</p>
       </div>
       <div class="footer__right">
-        <nav class="footer__nav" aria-label="Footer navigation">
+        <nav class="footer__nav" id="footer-nav" aria-label="Footer navigation">
           <a href="#about">About</a>
           <a href="#services">Services</a>
           <a href="#process">Process</a>
           <a href="#contact">Contact</a>
         </nav>
-        <!-- Hidden admin link — do not style obviously -->
         <a href="admin/" class="footer__admin-link" tabindex="-1" aria-hidden="true">&middot;</a>
       </div>
     </div>

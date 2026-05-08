@@ -1,430 +1,612 @@
 /* Neilz Network — admin.js
-   Handles login, content editing, and JSON export for the admin panel. */
+   Handles login, all panel editors, and JSON download for the sidebar admin. */
 
 (function () {
   'use strict';
 
-  let siteData = null; // live copy of services.json in memory
+  // ── State ──────────────────────────────────────────────────────────
+  let DATA = null;
 
-  // ── Boot ──────────────────────────────────────────────────
-  async function init() {
-    // Load services.json from one level up
-    try {
-      const res = await fetch('../data/services.json');
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      siteData = await res.json();
-    } catch (err) {
-      showError('Could not load ../data/services.json — ' + err.message);
-      return;
-    }
-
-    setupLogin();
-  }
-
-  // ── Login ─────────────────────────────────────────────────
-  function setupLogin() {
-    const btn   = $('login-btn');
-    const input = $('pw-input');
-    const err   = $('login-error');
-
-    function attempt() {
-      err.textContent = '';
-      if (input.value === siteData.adminPassword) {
-        $('login-screen').classList.add('hidden');
-        $('admin-panel').classList.remove('hidden');
-        buildAdmin();
-      } else {
-        err.textContent = 'Incorrect password. Try again.';
-        input.value = '';
-        input.focus();
-      }
-    }
-
-    btn.addEventListener('click', attempt);
-    input.addEventListener('keydown', e => { if (e.key === 'Enter') attempt(); });
-    input.focus();
-  }
-
-  // ── Build admin UI ────────────────────────────────────────
-  function buildAdmin() {
-    buildServicesEditor();
-    buildMetaEditor();
-    setupTabs();
-    setupDownload();
-  }
-
-  // ── Tab switching ─────────────────────────────────────────
-  function setupTabs() {
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const tab = btn.dataset.tab;
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        btn.classList.add('active');
-        $(`tab-${tab}`).classList.add('active');
-      });
-    });
-  }
-
-  // ── Services Editor ───────────────────────────────────────
-  function buildServicesEditor() {
-    const container = $('services-editor');
-    container.innerHTML = '';
-
-    siteData.services.forEach((svc, idx) => {
-      const card = document.createElement('div');
-      card.className = 'service-editor-card';
-      card.dataset.idx = idx;
-
-      card.innerHTML = `
-        <div class="service-editor-header">
-          <div class="service-editor-header-left">
-            <span class="service-editor-icon">${esc(svc.icon)}</span>
-            <div>
-              <div class="service-editor-name">${esc(svc.name)}</div>
-              <div class="service-editor-price">${esc(svc.price)} ${esc(svc.priceNote)}</div>
-            </div>
-          </div>
-          <span class="service-editor-toggle">▾</span>
-        </div>
-        <div class="service-editor-body">
-          <div style="margin-top:20px;">
-            <div class="two-col">
-              <div class="field-group">
-                <label>Icon / Emoji</label>
-                <input type="text" data-field="icon" value="${esc(svc.icon)}" maxlength="8">
-              </div>
-              <div class="field-group">
-                <label>Service ID (no spaces)</label>
-                <input type="text" data-field="id" value="${esc(svc.id)}" maxlength="50">
-              </div>
-            </div>
-
-            <div class="field-group">
-              <label>Service Name</label>
-              <input type="text" data-field="name" value="${esc(svc.name)}">
-            </div>
-
-            <div class="field-group">
-              <label>Description</label>
-              <textarea data-field="description" rows="3">${esc(svc.description)}</textarea>
-            </div>
-
-            <div class="two-col">
-              <div class="field-group">
-                <label>Price (e.g. $499)</label>
-                <input type="text" data-field="price" value="${esc(svc.price)}">
-              </div>
-              <div class="field-group">
-                <label>Price Note (e.g. one-time)</label>
-                <input type="text" data-field="priceNote" value="${esc(svc.priceNote)}">
-              </div>
-            </div>
-
-            <div class="field-group">
-              <label>Badge Text (leave blank for none)</label>
-              <div class="badge-row">
-                <input type="text" data-field="badge" value="${esc(svc.badge)}" placeholder="e.g. Most Popular" style="max-width:220px;">
-                <span style="font-size:0.8rem;color:var(--text-dim);">Shown as a highlighted label on the card</span>
-              </div>
-            </div>
-
-            <div class="field-group" style="margin-bottom:8px;">
-              <label>Features List</label>
-            </div>
-            <div class="features-editor" data-features-idx="${idx}">
-              ${svc.features.map((f, fi) => featureRow(f, fi)).join('')}
-            </div>
-            <button class="btn btn--ghost btn--sm" style="margin-bottom:20px;" data-add-feature="${idx}">
-              + Add Feature
-            </button>
-
-            <div style="display:flex;gap:10px;justify-content:flex-end;padding-top:12px;border-top:1px solid var(--border);">
-              <button class="btn btn--danger btn--sm" data-delete-service="${idx}">Delete Service</button>
-            </div>
-          </div>
-        </div>
-      `;
-
-      // Toggle expand/collapse
-      card.querySelector('.service-editor-header').addEventListener('click', () => {
-        card.classList.toggle('open');
-      });
-
-      // Live sync inputs → siteData
-      card.querySelectorAll('[data-field]').forEach(input => {
-        input.addEventListener('input', () => {
-          const field = input.dataset.field;
-          siteData.services[idx][field] = input.value;
-          // Update the header preview
-          card.querySelector('.service-editor-name').textContent = siteData.services[idx].name;
-          card.querySelector('.service-editor-price').textContent =
-            siteData.services[idx].price + ' ' + siteData.services[idx].priceNote;
-          card.querySelector('.service-editor-icon').textContent = siteData.services[idx].icon;
-        });
-      });
-
-      // Add feature
-      card.querySelector(`[data-add-feature="${idx}"]`).addEventListener('click', () => {
-        siteData.services[idx].features.push('New feature');
-        const fi = siteData.services[idx].features.length - 1;
-        const featEl = card.querySelector(`[data-features-idx="${idx}"]`);
-        const row = document.createElement('div');
-        row.innerHTML = featureRow('New feature', fi);
-        featEl.appendChild(row.firstElementChild);
-        bindFeatureRow(featEl.lastElementChild, idx);
-        featEl.lastElementChild.querySelector('input').focus();
-        featEl.lastElementChild.querySelector('input').select();
-      });
-
-      // Delete service (with confirmation)
-      card.querySelector(`[data-delete-service="${idx}"]`).addEventListener('click', () => {
-        if (confirm(`Delete "${svc.name}"? This cannot be undone until you re-download services.json.`)) {
-          siteData.services.splice(idx, 1);
-          buildServicesEditor(); // rebuild
-          showStatus('Service deleted — download JSON to save.', 'info');
-        }
-      });
-
-      // Bind existing feature rows
-      card.querySelectorAll('[data-features-idx] .feature-row').forEach(row => {
-        bindFeatureRow(row, idx);
-      });
-
-      container.appendChild(card);
-    });
-
-    // Add new service button
-    const addBtn = document.createElement('button');
-    addBtn.className = 'btn btn--primary';
-    addBtn.style.marginTop = '8px';
-    addBtn.textContent = '+ Add New Service';
-    addBtn.addEventListener('click', () => {
-      siteData.services.push({
-        id: 'new-service-' + Date.now(),
-        icon: '◆',
-        name: 'New Service',
-        description: 'Describe this service.',
-        price: '$0',
-        priceNote: 'one-time',
-        badge: '',
-        features: ['Feature one', 'Feature two']
-      });
-      buildServicesEditor();
-      showStatus('Service added — scroll down to edit it.', 'info');
-    });
-    container.appendChild(addBtn);
-  }
-
-  function featureRow(text, fi) {
-    return `
-      <div class="feature-row" data-fi="${fi}">
-        <input type="text" value="${esc(text)}" placeholder="Feature description">
-        <button class="btn-remove" title="Remove feature" type="button">×</button>
-      </div>
-    `;
-  }
-
-  function bindFeatureRow(row, svcIdx) {
-    const input = row.querySelector('input');
-    const fi    = parseInt(row.dataset.fi);
-
-    input.addEventListener('input', () => {
-      siteData.services[svcIdx].features[fi] = input.value;
-    });
-
-    row.querySelector('.btn-remove').addEventListener('click', () => {
-      const featuresEl = row.closest('[data-features-idx]');
-      const allRows    = Array.from(featuresEl.querySelectorAll('.feature-row'));
-      const rowIdx     = allRows.indexOf(row);
-      siteData.services[svcIdx].features.splice(rowIdx, 1);
-      row.remove();
-      // Re-index data-fi attributes
-      featuresEl.querySelectorAll('.feature-row').forEach((r, i) => {
-        r.dataset.fi = i;
-      });
-    });
-  }
-
-  // ── Meta Editor ───────────────────────────────────────────
-  function buildMetaEditor() {
-    const container = $('meta-editor');
-    container.innerHTML = '';
-    const m = siteData.meta;
-
-    // Basic info card
-    container.appendChild(metaCard('Business & Contact', `
-      <div class="two-col">
-        <div class="field-group">
-          <label>Business Name</label>
-          <input type="text" data-meta="businessName" value="${esc(m.businessName)}">
-        </div>
-        <div class="field-group">
-          <label>Owner Name</label>
-          <input type="text" data-meta="ownerName" value="${esc(m.ownerName)}">
-        </div>
-      </div>
-      <div class="field-group">
-        <label>Email Address</label>
-        <input type="email" data-meta="email" value="${esc(m.email)}">
-      </div>
-      <div class="field-group">
-        <label>Phone (optional)</label>
-        <input type="text" data-meta="phone" value="${esc(m.phone)}" placeholder="e.g. (555) 123-4567">
-      </div>
-    `));
-
-    // Hero / tagline card
-    container.appendChild(metaCard('Hero Section', `
-      <div class="field-group">
-        <label>Tagline (Hero Headline)</label>
-        <input type="text" data-meta="tagline" value="${esc(m.tagline)}">
-      </div>
-      <div class="field-group">
-        <label>Subtitle (below headline)</label>
-        <textarea data-meta="subtitle" rows="2">${esc(m.subtitle)}</textarea>
-      </div>
-      <div class="two-col">
-        <div class="field-group">
-          <label>Hero Button Text</label>
-          <input type="text" data-meta="heroCtaText" value="${esc(m.heroCtaText)}">
-        </div>
-        <div class="field-group">
-          <label>Hero Button Link</label>
-          <input type="text" data-meta="heroCtaLink" value="${esc(m.heroCtaLink)}">
-        </div>
-      </div>
-    `));
-
-    // About card
-    container.appendChild(metaCard('About Section', `
-      <div class="field-group">
-        <label>About Title (e.g. "Meet Skye")</label>
-        <input type="text" data-meta="aboutTitle" value="${esc(m.aboutTitle)}">
-      </div>
-      <div class="field-group">
-        <label>About Text</label>
-        <textarea data-meta="aboutText" rows="5">${esc(m.aboutText)}</textarea>
-      </div>
-    `));
-
-    // Footer card
-    container.appendChild(metaCard('Footer', `
-      <div class="field-group">
-        <label>Footer Copyright Text</label>
-        <input type="text" data-meta="footerText" value="${esc(m.footerText)}">
-      </div>
-    `));
-
-    // Password card
-    const pwCard = document.createElement('div');
-    pwCard.className = 'meta-card';
-    pwCard.innerHTML = `
-      <h3>Admin Password</h3>
-      <div class="password-note">
-        ⚠ The admin password is stored in services.json. Because this is a static site, anyone with access to your repo can read it. Keep your repository private or use a hard-to-guess password.
-      </div>
-      <div class="field-group">
-        <label>Current Password</label>
-        <input type="text" id="pw-display" value="${esc(siteData.adminPassword)}">
-      </div>
-      <div class="two-col" style="margin-top:4px;">
-        <div class="field-group">
-          <label>New Password</label>
-          <input type="password" id="new-pw" placeholder="Enter new password" autocomplete="new-password">
-        </div>
-        <div class="field-group">
-          <label>Confirm New Password</label>
-          <input type="password" id="confirm-pw" placeholder="Confirm new password" autocomplete="new-password">
-        </div>
-      </div>
-      <button class="btn btn--primary btn--sm" id="change-pw-btn">Update Password</button>
-      <p id="pw-msg" style="font-size:0.82rem;margin-top:10px;min-height:18px;"></p>
-    `;
-    container.appendChild(pwCard);
-
-    // Bind meta inputs
-    container.querySelectorAll('[data-meta]').forEach(input => {
-      input.addEventListener('input', () => {
-        siteData.meta[input.dataset.meta] = input.value;
-      });
-    });
-
-    // Password change
-    $('change-pw-btn').addEventListener('click', () => {
-      const np = $('new-pw').value;
-      const cp = $('confirm-pw').value;
-      const msg = $('pw-msg');
-
-      if (!np) { msg.style.color = 'var(--red)'; msg.textContent = 'Enter a new password.'; return; }
-      if (np !== cp) { msg.style.color = 'var(--red)'; msg.textContent = 'Passwords do not match.'; return; }
-      if (np.length < 6) { msg.style.color = 'var(--red)'; msg.textContent = 'Password must be at least 6 characters.'; return; }
-
-      siteData.adminPassword = np;
-      $('pw-display').value = np;
-      $('new-pw').value = '';
-      $('confirm-pw').value = '';
-      msg.style.color = 'var(--green)';
-      msg.textContent = 'Password updated — download JSON to save.';
-      setTimeout(() => { msg.textContent = ''; }, 4000);
-    });
-  }
-
-  function metaCard(title, innerHtml) {
-    const card = document.createElement('div');
-    card.className = 'meta-card';
-    card.innerHTML = `<h3>${title}</h3>${innerHtml}`;
-    return card;
-  }
-
-  // ── Download JSON ─────────────────────────────────────────
-  function setupDownload() {
-    $('download-btn').addEventListener('click', downloadJSON);
-  }
-
-  function downloadJSON() {
-    const json = JSON.stringify(siteData, null, 2);
-    const blob = new Blob([json], { type: 'application/json' });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    a.href     = url;
-    a.download = 'services.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    showStatus('services.json downloaded! Replace /data/services.json and push to GitHub.', 'success');
-  }
-
-  // ── Status toast ──────────────────────────────────────────
-  let statusTimer = null;
-
-  function showStatus(msg, type = 'info') {
-    const bar = $('status-bar');
-    bar.textContent = msg;
-    bar.className   = `show ${type}`;
-    clearTimeout(statusTimer);
-    statusTimer = setTimeout(() => { bar.classList.remove('show'); }, 4000);
-  }
-
-  // ── Login error helper ────────────────────────────────────
-  function showError(msg) {
-    const err = $('login-error');
-    if (err) err.textContent = msg;
-  }
-
-  // ── Utilities ─────────────────────────────────────────────
+  // ── Helpers ────────────────────────────────────────────────────────
   function $(id) { return document.getElementById(id); }
+
+  function mk(tag, attrs) {
+    const el = document.createElement(tag);
+    if (attrs) {
+      Object.entries(attrs).forEach(function(entry) {
+        const k = entry[0]; const v = entry[1];
+        if      (k === 'class')  el.className = v;
+        else if (k === 'html')   el.innerHTML = v;
+        else if (k === 'text')   el.textContent = v;
+        else if (k === 'style')  el.style.cssText = v;
+        else el.setAttribute(k, v);
+      });
+    }
+    return el;
+  }
+
+  function on(el, ev, fn) { el.addEventListener(ev, fn); return el; }
+
+  function toast(msg, type) {
+    const t = $('toast');
+    t.textContent = msg;
+    t.className = 'show ' + (type || 'ok');
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(function() { t.className = ''; }, 3200);
+  }
+
+  function makeInput(val, ph) {
+    const el = mk('input', { type: 'text' });
+    el.value = val || '';
+    if (ph) el.placeholder = ph;
+    return el;
+  }
+
+  function makeTA(val, rows) {
+    const el = document.createElement('textarea');
+    el.rows = rows || 3;
+    el.value = val || '';
+    return el;
+  }
+
+  function btnX(title) {
+    const b = mk('button', { class: 'btn-x', type: 'button', html: '&#x2715;' });
+    b.title = title || 'Remove';
+    return b;
+  }
+
+  function wrapField(labelTxt, inputEl) {
+    const f = mk('div', { class: 'field' });
+    f.appendChild(mk('label', { text: labelTxt }));
+    f.appendChild(inputEl);
+    return f;
+  }
 
   function esc(str) {
     return String(str || '')
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
-  // ── Start ─────────────────────────────────────────────────
-  init();
+  // ── Load / Download JSON ───────────────────────────────────────────
+  async function loadData() {
+    const res = await fetch('../data/services.json?nc=' + Date.now());
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return res.json();
+  }
+
+  function downloadJSON() {
+    const json = JSON.stringify(DATA, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url  = URL.createObjectURL(blob);
+    const a    = mk('a', { href: url, download: 'services.json' });
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
+    toast('services.json downloaded! Replace the file in your project and push to GitHub.', 'ok');
+  }
+
+  // ── LOGIN ──────────────────────────────────────────────────────────
+  function initLogin() {
+    const btn = $('login-btn');
+    const inp = $('pw-input');
+    const err = $('login-error');
+
+    async function attempt() {
+      const pw = inp.value.trim();
+      if (!pw) { err.textContent = 'Please enter your password.'; return; }
+      btn.disabled = true;
+      btn.textContent = 'Checking…';
+      err.textContent = '';
+      try {
+        DATA = await loadData();
+        if (pw !== DATA.adminPassword) {
+          err.textContent = 'Incorrect password — try again.';
+          inp.value = '';
+          inp.focus();
+          DATA = null;
+        } else {
+          $('login-screen').classList.add('hidden');
+          $('admin-app').classList.remove('hidden');
+          initApp();
+        }
+      } catch (e) {
+        err.textContent = 'Could not load site data. Open this page through VS Code Live Server (not by double-clicking the file).';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Sign In →';
+      }
+    }
+
+    on(btn, 'click', attempt);
+    on(inp, 'keydown', function(e) { if (e.key === 'Enter') attempt(); });
+    inp.focus();
+  }
+
+  // ── SIDEBAR NAVIGATION ─────────────────────────────────────────────
+  var PANEL_LABELS = {
+    dashboard: 'Dashboard', hero: 'Hero Section', about: 'About',
+    services: 'Services', process: 'Process Steps', contact: 'Contact',
+    colors: 'Color Theme', navigation: 'Navigation', seo: 'SEO & Meta',
+    security: 'Security', publish: 'Publish'
+  };
+
+  function showPanel(name) {
+    document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
+    document.querySelectorAll('.sb-link[data-panel]').forEach(function(l) { l.classList.remove('active'); });
+    var panel = $('panel-' + name);
+    if (panel) panel.classList.add('active');
+    document.querySelectorAll('.sb-link[data-panel="' + name + '"]').forEach(function(l) { l.classList.add('active'); });
+    $('topbar-title').textContent = PANEL_LABELS[name] || name;
+    window.scrollTo(0, 0);
+  }
+
+  // ── DASHBOARD ─────────────────────────────────────────────────────
+  function renderDashboard() {
+    $('d-svc').textContent   = (DATA.services || []).length;
+    $('d-steps').textContent = (DATA.processSteps || []).length;
+    $('d-email').textContent = (DATA.meta && DATA.meta.email) || '—';
+  }
+
+  // ── META FIELD BINDING ─────────────────────────────────────────────
+  function bindMetaFields() {
+    document.querySelectorAll('[data-meta]').forEach(function(el) {
+      var key = el.dataset.meta;
+      el.value = (DATA.meta && DATA.meta[key] != null) ? DATA.meta[key] : '';
+      on(el, 'input', function() { DATA.meta[key] = el.value; });
+    });
+  }
+
+  // ── HERO — Stats bar ───────────────────────────────────────────────
+  function renderStatsEditor() {
+    var c = $('stats-editor');
+    c.innerHTML = '';
+    (DATA.heroStats || []).forEach(function(stat, i) {
+      var row    = mk('div', { class: 'list-row' });
+      var numInp = makeInput(stat.num, 'e.g. 100%');
+      numInp.style.cssText = 'flex:0 0 100px;min-width:0';
+      on(numInp, 'input', function() { DATA.heroStats[i].num = numInp.value; });
+      var lblInp = makeInput(stat.label, 'e.g. Custom Built');
+      on(lblInp, 'input', function() { DATA.heroStats[i].label = lblInp.value; });
+      var del = btnX('Remove stat');
+      on(del, 'click', function() { DATA.heroStats.splice(i, 1); renderStatsEditor(); });
+      row.appendChild(numInp);
+      row.appendChild(lblInp);
+      row.appendChild(del);
+      c.appendChild(row);
+    });
+  }
+
+  function initHero() {
+    renderStatsEditor();
+    on($('add-stat'), 'click', function() {
+      if (!DATA.heroStats) DATA.heroStats = [];
+      DATA.heroStats.push({ num: '', label: '' });
+      renderStatsEditor();
+    });
+  }
+
+  // ── ABOUT — Photo upload ───────────────────────────────────────────
+  function initAbout() {
+    var photoInput = $('photo-input');
+    var photoPrev  = $('photo-prev');
+    var photoIcon  = $('photo-icon');
+    var removeBtn  = $('remove-photo');
+
+    function showPhoto(src) {
+      photoPrev.src = src;
+      photoPrev.classList.add('show');
+      photoIcon.style.display = 'none';
+      removeBtn.style.display = '';
+    }
+    function clearPhoto() {
+      photoPrev.src = '';
+      photoPrev.classList.remove('show');
+      photoIcon.style.display = '';
+      removeBtn.style.display = 'none';
+      DATA.meta.aboutPhoto = '';
+    }
+
+    if (DATA.meta && DATA.meta.aboutPhoto) showPhoto(DATA.meta.aboutPhoto);
+
+    on(photoInput, 'change', function() {
+      var file = photoInput.files[0];
+      if (!file) return;
+      if (file.size > 2.5 * 1024 * 1024) {
+        toast('Image too large — max ~2.5 MB. Try compressing it first.', 'err');
+        return;
+      }
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        DATA.meta.aboutPhoto = e.target.result;
+        showPhoto(e.target.result);
+        toast('Photo loaded — download JSON & publish to go live!', 'info');
+      };
+      reader.readAsDataURL(file);
+    });
+
+    on(removeBtn, 'click', function() {
+      clearPhoto();
+      photoInput.value = '';
+      toast('Photo removed');
+    });
+  }
+
+  // ── SERVICES CRUD ──────────────────────────────────────────────────
+  function renderFeatures(si, listEl) {
+    listEl.innerHTML = '';
+    var feats = DATA.services[si].features || [];
+    feats.forEach(function(feat, fi) {
+      var row = mk('div', { class: 'feat-row' });
+      var inp = makeInput(feat, 'Feature text');
+      on(inp, 'input', function() { DATA.services[si].features[fi] = inp.value; });
+      var del = btnX('Remove feature');
+      on(del, 'click', function() {
+        DATA.services[si].features.splice(fi, 1);
+        renderFeatures(si, listEl);
+      });
+      row.appendChild(inp);
+      row.appendChild(del);
+      listEl.appendChild(row);
+    });
+  }
+
+  function renderServicesEditor() {
+    var c = $('services-editor');
+    c.innerHTML = '';
+    (DATA.services || []).forEach(function(svc, si) {
+      var card  = mk('div', { class: 'svc-card' });
+      var hdr   = mk('div', { class: 'svc-hdr' });
+      var hdrL  = mk('div', { class: 'svc-hdr-l' });
+      var iconEl  = mk('span', { class: 'svc-icon',  text: svc.icon  || '●' });
+      var info    = mk('div');
+      var nameEl  = mk('div',  { class: 'svc-name',  text: svc.name  || 'Untitled' });
+      var priceEl = mk('div',  { class: 'svc-price', text: (svc.price || '') + (svc.priceNote ? ' · ' + svc.priceNote : '') });
+      info.appendChild(nameEl);
+      info.appendChild(priceEl);
+      hdrL.appendChild(iconEl);
+      hdrL.appendChild(info);
+      var chev = mk('span', { class: 'svc-chev', html: '&#9660;' });
+      hdr.appendChild(hdrL);
+      hdr.appendChild(chev);
+      on(hdr, 'click', function() { card.classList.toggle('open'); });
+
+      var body = mk('div', { class: 'svc-body' });
+
+      // Row 1: icon · id · badge
+      var r1 = mk('div', { class: 'three-col', style: 'margin-bottom:12px' });
+      var iconInp  = makeInput(svc.icon,  '✶');
+      var idInp    = makeInput(svc.id,    'service-id');
+      var badgeInp = makeInput(svc.badge || '', 'Most Popular');
+      on(iconInp,  'input', function() { DATA.services[si].icon  = iconInp.value;  iconEl.textContent = iconInp.value; });
+      on(idInp,    'input', function() { DATA.services[si].id    = idInp.value; });
+      on(badgeInp, 'input', function() { DATA.services[si].badge = badgeInp.value; });
+      r1.appendChild(wrapField('Icon (emoji)', iconInp));
+      r1.appendChild(wrapField('ID (unique, no spaces)', idInp));
+      r1.appendChild(wrapField('Badge (blank = none)', badgeInp));
+      body.appendChild(r1);
+
+      // Name
+      var nameInp = makeInput(svc.name, 'Service Name');
+      on(nameInp, 'input', function() {
+        DATA.services[si].name = nameInp.value;
+        nameEl.textContent = nameInp.value;
+      });
+      body.appendChild(wrapField('Service Name', nameInp));
+
+      // Description
+      var descTa = makeTA(svc.description, 3);
+      on(descTa, 'input', function() { DATA.services[si].description = descTa.value; });
+      body.appendChild(wrapField('Description', descTa));
+
+      // Price + Note
+      var r2 = mk('div', { class: 'two-col' });
+      var priceInp = makeInput(svc.price, '$499');
+      var noteInp  = makeInput(svc.priceNote, 'one-time');
+      on(priceInp, 'input', function() {
+        DATA.services[si].price = priceInp.value;
+        priceEl.textContent = priceInp.value + (DATA.services[si].priceNote ? ' · ' + DATA.services[si].priceNote : '');
+      });
+      on(noteInp, 'input', function() {
+        DATA.services[si].priceNote = noteInp.value;
+        priceEl.textContent = (DATA.services[si].price || '') + (noteInp.value ? ' · ' + noteInp.value : '');
+      });
+      r2.appendChild(wrapField('Price', priceInp));
+      r2.appendChild(wrapField('Price Note (e.g. one-time)', noteInp));
+      body.appendChild(r2);
+
+      // Features
+      body.appendChild(mk('div', { class: 'card-title', style: 'margin-top:18px;margin-bottom:10px', text: 'Features' }));
+      var featList = mk('div', { class: 'feat-list' });
+      body.appendChild(featList);
+      renderFeatures(si, featList);
+
+      var addFeat = mk('button', { class: 'btn btn--ghost btn--sm', type: 'button', text: '+ Add Feature' });
+      on(addFeat, 'click', function() {
+        if (!DATA.services[si].features) DATA.services[si].features = [];
+        DATA.services[si].features.push('');
+        renderFeatures(si, featList);
+      });
+      body.appendChild(addFeat);
+
+      // Delete service
+      var delBtn = mk('button', { class: 'btn btn--danger btn--sm', type: 'button', text: '🗑  Delete This Service', style: 'margin-top:20px' });
+      on(delBtn, 'click', function() {
+        if (confirm('Delete service "' + (DATA.services[si].name || 'Untitled') + '"?')) {
+          DATA.services.splice(si, 1);
+          renderServicesEditor();
+          renderDashboard();
+          toast('Service deleted');
+        }
+      });
+      body.appendChild(delBtn);
+
+      card.appendChild(hdr);
+      card.appendChild(body);
+      c.appendChild(card);
+    });
+  }
+
+  function initServices() {
+    renderServicesEditor();
+    on($('add-svc'), 'click', function() {
+      if (!DATA.services) DATA.services = [];
+      DATA.services.push({
+        id: 'service-' + Date.now(),
+        icon: '✶',
+        name: 'New Service',
+        description: '',
+        price: '',
+        priceNote: '',
+        badge: '',
+        features: []
+      });
+      renderServicesEditor();
+      renderDashboard();
+      // Auto-open the new card
+      var cards = document.querySelectorAll('#services-editor .svc-card');
+      if (cards.length) cards[cards.length - 1].classList.add('open');
+      toast('New service added — fill in the details below', 'info');
+    });
+  }
+
+  // ── PROCESS STEPS ──────────────────────────────────────────────────
+  function renderProcessEditor() {
+    var c = $('process-editor');
+    c.innerHTML = '';
+    (DATA.processSteps || []).forEach(function(step, i) {
+      var row   = mk('div', { class: 'step-row' });
+      var badge = mk('div', { class: 'step-num-badge', text: step.number || String(i + 1).padStart(2, '0') });
+
+      var fields = mk('div', { class: 'step-fields' });
+      var r1     = mk('div', { class: 'two-col' });
+      var numInp   = makeInput(step.number, '01');
+      var titleInp = makeInput(step.title,  'Step Title');
+      on(numInp,   'input', function() { DATA.processSteps[i].number = numInp.value;   badge.textContent = numInp.value; });
+      on(titleInp, 'input', function() { DATA.processSteps[i].title  = titleInp.value; });
+      r1.appendChild(wrapField('Step Number', numInp));
+      r1.appendChild(wrapField('Title', titleInp));
+
+      var descTa = makeTA(step.description, 2);
+      on(descTa, 'input', function() { DATA.processSteps[i].description = descTa.value; });
+
+      fields.appendChild(r1);
+      fields.appendChild(wrapField('Description', descTa));
+
+      var del = btnX('Remove step');
+      del.classList.add('step-del');
+      on(del, 'click', function() {
+        DATA.processSteps.splice(i, 1);
+        renderProcessEditor();
+        renderDashboard();
+      });
+
+      row.appendChild(badge);
+      row.appendChild(fields);
+      row.appendChild(del);
+      c.appendChild(row);
+    });
+  }
+
+  function initProcess() {
+    renderProcessEditor();
+    on($('add-step'), 'click', function() {
+      if (!DATA.processSteps) DATA.processSteps = [];
+      var n = String(DATA.processSteps.length + 1).padStart(2, '0');
+      DATA.processSteps.push({ number: n, title: '', description: '' });
+      renderProcessEditor();
+      renderDashboard();
+    });
+  }
+
+  // ── CONTACT — Promise items ────────────────────────────────────────
+  function renderPromiseEditor() {
+    var c = $('promise-editor');
+    c.innerHTML = '';
+    (DATA.promiseItems || []).forEach(function(item, i) {
+      var row = mk('div', { class: 'list-row' });
+      var inp = makeInput(item, 'e.g. Response within 24 hours');
+      on(inp, 'input', function() { DATA.promiseItems[i] = inp.value; });
+      var del = btnX('Remove item');
+      on(del, 'click', function() { DATA.promiseItems.splice(i, 1); renderPromiseEditor(); });
+      row.appendChild(inp);
+      row.appendChild(del);
+      c.appendChild(row);
+    });
+  }
+
+  function initContact() {
+    renderPromiseEditor();
+    on($('add-promise'), 'click', function() {
+      if (!DATA.promiseItems) DATA.promiseItems = [];
+      DATA.promiseItems.push('');
+      renderPromiseEditor();
+    });
+  }
+
+  // ── COLORS ─────────────────────────────────────────────────────────
+  var COLOR_LABEL = {
+    '--bg':           'Background',
+    '--surface':      'Surface / Nav',
+    '--card':         'Card',
+    '--accent':       'Accent',
+    '--accent-light': 'Accent Light',
+    '--text':         'Text',
+    '--text-muted':   'Text Muted',
+    '--text-dim':     'Text Dim'
+  };
+
+  function refreshColorPreview(mode) {
+    var prevEl = $(mode + '-prev');
+    if (!prevEl || !DATA.theme || !DATA.theme[mode]) return;
+    var keys = ['--bg', '--surface', '--card', '--accent', '--accent-light', '--text'];
+    prevEl.innerHTML = keys.map(function(k) {
+      var col = DATA.theme[mode][k] || '#888888';
+      return '<div class="color-swatch" style="background:' + col + '" title="' + k + '"></div>';
+    }).join('');
+  }
+
+  function renderColorsEditor(mode) {
+    var c = $(mode + '-colors');
+    if (!c || !DATA.theme || !DATA.theme[mode]) return;
+    c.innerHTML = '';
+
+    Object.entries(DATA.theme[mode]).forEach(function(entry) {
+      var key   = entry[0];
+      var value = entry[1];
+      var item   = mk('div', { class: 'color-item' });
+      var lbl    = mk('label', { text: COLOR_LABEL[key] || key });
+      var row    = mk('div', { class: 'color-row' });
+      var picker = mk('input', { type: 'color' });
+      var hex    = mk('input', { class: 'color-hex', type: 'text', placeholder: '#000000', maxlength: '7' });
+
+      var safe = /^#[0-9a-fA-F]{6}$/.test(value) ? value : '#888888';
+      picker.value = safe;
+      hex.value    = safe.toUpperCase();
+
+      on(picker, 'input', function() {
+        hex.value = picker.value.toUpperCase();
+        DATA.theme[mode][key] = picker.value;
+        refreshColorPreview(mode);
+      });
+      on(hex, 'input', function() {
+        var v = hex.value.trim();
+        if (/^#[0-9a-fA-F]{6}$/.test(v)) {
+          picker.value = v;
+          DATA.theme[mode][key] = v;
+          refreshColorPreview(mode);
+        }
+      });
+      on(hex, 'blur', function() {
+        hex.value = DATA.theme[mode][key].toUpperCase();
+      });
+
+      row.appendChild(picker);
+      row.appendChild(hex);
+      item.appendChild(lbl);
+      item.appendChild(row);
+      c.appendChild(item);
+    });
+
+    refreshColorPreview(mode);
+  }
+
+  // ── NAVIGATION ─────────────────────────────────────────────────────
+  function renderNavEditor() {
+    var c = $('nav-editor');
+    c.innerHTML = '';
+    (DATA.navLinks || []).forEach(function(link, i) {
+      var row     = mk('div', { class: 'list-row' });
+      var lblInp  = makeInput(link.label, 'Label');
+      var hrefInp = makeInput(link.href,  '#section');
+      hrefInp.classList.add('narrow');
+      on(lblInp,  'input', function() { DATA.navLinks[i].label = lblInp.value; });
+      on(hrefInp, 'input', function() { DATA.navLinks[i].href  = hrefInp.value; });
+      var del = btnX('Remove link');
+      on(del, 'click', function() { DATA.navLinks.splice(i, 1); renderNavEditor(); });
+      row.appendChild(lblInp);
+      row.appendChild(hrefInp);
+      row.appendChild(del);
+      c.appendChild(row);
+    });
+  }
+
+  // ── SECURITY ───────────────────────────────────────────────────────
+  function initSecurity() {
+    $('cur-pw').value = DATA.adminPassword || '';
+
+    on($('change-pw'), 'click', function() {
+      var newPw  = $('new-pw').value.trim();
+      var confPw = $('conf-pw').value.trim();
+      var msg    = $('pw-msg');
+
+      if (!newPw) {
+        msg.style.color = 'var(--red)'; msg.textContent = 'Enter a new password.'; return;
+      }
+      if (newPw.length < 6) {
+        msg.style.color = 'var(--red)'; msg.textContent = 'Must be at least 6 characters.'; return;
+      }
+      if (newPw !== confPw) {
+        msg.style.color = 'var(--red)'; msg.textContent = "Passwords don’t match."; return;
+      }
+
+      DATA.adminPassword     = newPw;
+      $('cur-pw').value      = newPw;
+      $('new-pw').value      = '';
+      $('conf-pw').value     = '';
+      msg.style.color        = 'var(--green)';
+      msg.textContent        = '✓ Password updated. Download JSON to save!';
+      toast('Password changed — download & publish to apply', 'ok');
+    });
+  }
+
+  // ── INIT APP ───────────────────────────────────────────────────────
+  function initApp() {
+    // Sidebar links
+    document.querySelectorAll('.sb-link[data-panel]').forEach(function(btn) {
+      on(btn, 'click', function() { showPanel(btn.dataset.panel); });
+    });
+    // Dashboard shortcuts
+    document.querySelectorAll('.dash-sc[data-go]').forEach(function(sc) {
+      on(sc, 'click', function() { showPanel(sc.dataset.go); });
+    });
+    // Logout
+    on($('logout-btn'), 'click', function() {
+      DATA = null;
+      $('admin-app').classList.add('hidden');
+      $('login-screen').classList.remove('hidden');
+      $('pw-input').value          = '';
+      $('login-error').textContent = '';
+      $('pw-input').focus();
+    });
+    // Download
+    on($('dl-btn'),  'click', downloadJSON);
+    on($('pub-dl'),  'click', downloadJSON);
+    // Add nav link
+    on($('add-nav'), 'click', function() {
+      if (!DATA.navLinks) DATA.navLinks = [];
+      DATA.navLinks.push({ label: '', href: '#' });
+      renderNavEditor();
+    });
+
+    // Populate all editors
+    renderDashboard();
+    bindMetaFields();
+    initHero();
+    initAbout();
+    initServices();
+    initProcess();
+    initContact();
+    renderColorsEditor('light');
+    renderColorsEditor('dark');
+    renderNavEditor();
+    initSecurity();
+
+    showPanel('dashboard');
+  }
+
+  // ── BOOT ───────────────────────────────────────────────────────────
+  initLogin();
 
 })();
