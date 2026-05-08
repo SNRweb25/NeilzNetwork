@@ -135,6 +135,23 @@
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
+  // ── Dark / Light mode toggle ──────────────────────────────
+  const themeToggle = $('theme-toggle');
+  const root = document.documentElement;
+
+  // Apply saved preference or system preference on load
+  const savedTheme = localStorage.getItem('nn-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+    root.setAttribute('data-theme', 'dark');
+  }
+
+  themeToggle.addEventListener('click', () => {
+    const isDark = root.getAttribute('data-theme') === 'dark';
+    root.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    localStorage.setItem('nn-theme', isDark ? 'light' : 'dark');
+  });
+
   // ── Nav scroll effect ─────────────────────────────────────
   const nav = $('nav');
   const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 24);
