@@ -108,6 +108,25 @@
 
 html { scroll-behavior: smooth; font-size: 16px; }
 
+/* ── Smooth light/dark transition ── */
+body,
+.nav, .nav__inner, .nav__links,
+.hero, .hero__bg, .hero__stats,
+.about, .about__avatar, .about__avatar-wrap,
+.services, .service-card,
+.process, .process-step,
+.contact, .contact__form,
+.footer,
+.btn, .skill-tag, .feature-item,
+.form-group input, .form-group select, .form-group textarea {
+  transition:
+    background-color 0.35s ease,
+    background     0.35s ease,
+    color          0.35s ease,
+    border-color   0.35s ease,
+    box-shadow     0.35s ease;
+}
+
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background: var(--bg);
