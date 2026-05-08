@@ -445,6 +445,94 @@
     });
   }
 
+  // ── THEME PRESETS ──────────────────────────────────────────────────
+  var THEME_PRESETS = [
+    {
+      name: 'Warm Coffee',
+      light: { '--bg':'#FAF4EC','--surface':'#F2E8D8','--card':'#FFFFFF','--accent':'#7A5C3E','--accent-light':'#997E67','--text':'#231008','--text-muted':'#5C3D25','--text-dim':'#997E67' },
+      dark:  { '--bg':'#100a06','--surface':'#181009','--card':'#20150d','--accent':'#997E67','--accent-light':'#CCBEB1','--text':'#FFDBBB','--text-muted':'#CCBEB1','--text-dim':'#664930' }
+    },
+    {
+      name: 'Ocean Blue',
+      light: { '--bg':'#F0F6FF','--surface':'#E4EEFB','--card':'#FFFFFF','--accent':'#1E6BB8','--accent-light':'#3B82C4','--text':'#0B1E35','--text-muted':'#1E4A7A','--text-dim':'#5B8FB9' },
+      dark:  { '--bg':'#040D1A','--surface':'#071424','--card':'#0C1E30','--accent':'#4B9EE8','--accent-light':'#93C5FD','--text':'#C8E0FF','--text-muted':'#93C5FD','--text-dim':'#1E4A7A' }
+    },
+    {
+      name: 'Forest Green',
+      light: { '--bg':'#F2F7F2','--surface':'#E8F0E8','--card':'#FFFFFF','--accent':'#2D6A3F','--accent-light':'#3D8B53','--text':'#0D2416','--text-muted':'#1A4A29','--text-dim':'#5A8A68' },
+      dark:  { '--bg':'#040F08','--surface':'#071610','--card':'#0C1E14','--accent':'#4CAF6E','--accent-light':'#86EFB0','--text':'#C2F0D0','--text-muted':'#86EFB0','--text-dim':'#1A4A29' }
+    },
+    {
+      name: 'Deep Purple',
+      light: { '--bg':'#F5F3FF','--surface':'#EDE9FE','--card':'#FFFFFF','--accent':'#6D28D9','--accent-light':'#7C3AED','--text':'#1E0550','--text-muted':'#4C1D95','--text-dim':'#7C3AED' },
+      dark:  { '--bg':'#07050F','--surface':'#0F0B1E','--card':'#17112E','--accent':'#8B5CF6','--accent-light':'#C4B5FD','--text':'#EDE9FE','--text-muted':'#C4B5FD','--text-dim':'#4C1D95' }
+    },
+    {
+      name: 'Slate Grey',
+      light: { '--bg':'#F8FAFC','--surface':'#F1F5F9','--card':'#FFFFFF','--accent':'#334155','--accent-light':'#475569','--text':'#0F172A','--text-muted':'#1E293B','--text-dim':'#64748B' },
+      dark:  { '--bg':'#080A0D','--surface':'#0F1117','--card':'#161B24','--accent':'#94A3B8','--accent-light':'#CBD5E1','--text':'#E2E8F0','--text-muted':'#CBD5E1','--text-dim':'#334155' }
+    },
+    {
+      name: 'Sunset Orange',
+      light: { '--bg':'#FFF7F0','--surface':'#FEEEE0','--card':'#FFFFFF','--accent':'#C2410C','--accent-light':'#EA580C','--text':'#2D0E00','--text-muted':'#7C2D12','--text-dim':'#C2410C' },
+      dark:  { '--bg':'#0F0600','--surface':'#1A0C00','--card':'#261200','--accent':'#FB923C','--accent-light':'#FDBA74','--text':'#FFF0E0','--text-muted':'#FDBA74','--text-dim':'#7C2D12' }
+    },
+    {
+      name: 'Rose Gold',
+      light: { '--bg':'#FFF5F8','--surface':'#FFE8EF','--card':'#FFFFFF','--accent':'#BE185D','--accent-light':'#DB2777','--text':'#3B001A','--text-muted':'#831843','--text-dim':'#BE185D' },
+      dark:  { '--bg':'#0F0007','--surface':'#1A000D','--card':'#250014','--accent':'#F472B6','--accent-light':'#FBCFE8','--text':'#FFE4F2','--text-muted':'#FBCFE8','--text-dim':'#831843' }
+    },
+    {
+      name: 'Pure Black',
+      light: { '--bg':'#F7F7F7','--surface':'#EEEEEE','--card':'#FFFFFF','--accent':'#111111','--accent-light':'#333333','--text':'#000000','--text-muted':'#222222','--text-dim':'#888888' },
+      dark:  { '--bg':'#000000','--surface':'#0A0A0A','--card':'#111111','--accent':'#FFFFFF','--accent-light':'#CCCCCC','--text':'#FFFFFF','--text-muted':'#CCCCCC','--text-dim':'#555555' }
+    }
+  ];
+
+  function renderThemePresets() {
+    var grid = $('presets-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    THEME_PRESETS.forEach(function(preset) {
+      var card = mk('div', { class: 'preset-card' });
+
+      // 5-swatch colour strip using light palette
+      var strip = mk('div', { class: 'preset-swatches' });
+      ['--bg','--surface','--accent','--accent-light','--text'].forEach(function(k) {
+        var sw = mk('div', { class: 'preset-swatch' });
+        sw.style.background = preset.light[k] || '#888';
+        strip.appendChild(sw);
+      });
+
+      var lbl = mk('div', { class: 'preset-name', text: preset.name });
+      card.appendChild(strip);
+      card.appendChild(lbl);
+
+      // Mark as active if it matches current theme
+      if (DATA.theme && DATA.theme.light && DATA.theme.light['--accent'] === preset.light['--accent']) {
+        card.classList.add('chosen');
+      }
+
+      on(card, 'click', function() {
+        // Deep-copy preset into DATA.theme
+        DATA.theme = {
+          light: Object.assign({}, preset.light),
+          dark:  Object.assign({}, preset.dark)
+        };
+        // Re-render color pickers
+        renderColorsEditor('light');
+        renderColorsEditor('dark');
+        // Update active state
+        document.querySelectorAll('.preset-card').forEach(function(c) { c.classList.remove('chosen'); });
+        card.classList.add('chosen');
+        toast('Theme "' + preset.name + '" applied — download & publish to go live!', 'info');
+      });
+
+      grid.appendChild(card);
+    });
+  }
+
   // ── COLORS ─────────────────────────────────────────────────────────
   var COLOR_LABEL = {
     '--bg':           'Background',
@@ -598,6 +686,7 @@
     initServices();
     initProcess();
     initContact();
+    renderThemePresets();
     renderColorsEditor('light');
     renderColorsEditor('dark');
     renderNavEditor();

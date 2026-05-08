@@ -182,6 +182,15 @@
     #toast.info{color:var(--accent-l);border-color:var(--accent-b)}
     #toast.err{color:var(--red);border-color:rgba(248,113,113,.3)}
 
+    /* ── THEME PRESETS ── */
+    .presets-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-bottom:4px}
+    .preset-card{border:2px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:border-color var(--t),transform var(--t),box-shadow var(--t);user-select:none}
+    .preset-card:hover{border-color:var(--border-hi);transform:translateY(-2px)}
+    .preset-card.chosen{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-d)}
+    .preset-swatches{display:flex;height:38px}
+    .preset-swatch{flex:1;transition:background .25s}
+    .preset-name{padding:7px 8px;font-size:.72rem;font-weight:700;letter-spacing:.01em;text-align:center;color:var(--muted);background:var(--card2)}
+
     /* ── RESPONSIVE ── */
     @media(max-width:768px){
       :root{--sw:0px}
@@ -377,8 +386,13 @@
 
       <!-- COLORS -->
       <div class="panel" id="panel-colors">
-        <div class="panel-head"><h2>Color Theme</h2><p>Edit light and dark palettes.</p></div>
+        <div class="panel-head"><h2>Color Theme</h2><p>Pick a preset or build your own.</p></div>
         <div class="notice info">ℹ️ Download the JSON and push to GitHub after changing colors. Then hard-refresh the site (Ctrl+Shift+R).</div>
+        <div class="card">
+          <div class="card-title">Presets</div>
+          <p style="font-size:.84rem;margin-bottom:14px;color:var(--muted)">Click any theme to load it. You can still tweak the individual colors below.</p>
+          <div class="presets-grid" id="presets-grid"></div>
+        </div>
         <div class="card">
           <div class="card-title">Light Mode</div>
           <div class="color-preview" id="light-prev"></div>
